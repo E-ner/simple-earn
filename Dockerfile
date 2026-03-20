@@ -32,11 +32,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
-COPY --from=builder --chown=nextjs:nodejs /app/reset-admin.js ./reset-admin.js
-COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
-COPY --from=builder --chown=nextjs:nodejs /app/entrypoint.sh ./entrypoint.sh
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/prisma ./prisma
 
 # Automatically leverage output traces to reduce image size
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
@@ -49,6 +46,4 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Make sure entrypoint is executable
-# Note: we use sh because Alpine's default shell is ash/sh
-CMD ["sh", "entrypoint.sh"]
+CMD ["node", "server.js"]
