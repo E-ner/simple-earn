@@ -11,7 +11,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-md hover:bg-[var(--surface)] text-[var(--text-tertiary)] transition-all relative overflow-hidden group"
+      className="p-2 rounded-md hover:bg-(--surface) text-(--text-tertiary) transition-all relative overflow-hidden group"
       aria-label="Toggle Theme"
     >
       <AnimatePresence mode="wait" initial={false}>
@@ -23,9 +23,9 @@ export default function ThemeToggle() {
           transition={{ duration: 0.2 }}
         >
           {theme === 'light' ? (
-            <Moon className="w-5 h-5 text-[#888] group-hover:text-[var(--accent)]" />
+            <Moon className="w-5 h-5 text-[#888] group-hover:text-(--accent)" />
           ) : (
-            <Sun className="w-5 h-5 text-[#888] group-hover:text-[var(--accent)]" />
+            <Sun className="w-5 h-5 text-[#888] group-hover:text-(--accent)" />
           )}
         </motion.div>
       </AnimatePresence>

@@ -25,15 +25,15 @@ export default function AdminSidebar({ lang }: { lang: string }) {
   const pathname = usePathname()
 
   return (
-    <aside className="w-56 shrink-0 h-full bg-[var(--bg-overlay)] border-r border-[var(--border)] flex flex-col">
+    <aside className="w-56 shrink-0 h-full bg-(--bg-overlay) border-r border-(--border) flex flex-col">
       {/* Brand */}
-      <div className="px-4 py-5 border-b border-[var(--border)] flex items-center gap-3">
-        <div className="w-7 h-7 rounded bg-[var(--purple)] flex items-center justify-center shrink-0">
+      <div className="px-4 py-5 border-b border-(--border) flex items-center gap-3">
+        <div className="w-7 h-7 rounded bg-(--purple) flex items-center justify-center shrink-0">
           <ShieldCheck className="w-4 h-4 text-white" />
         </div>
         <div>
-          <p className="text-[11px] font-black uppercase tracking-widest text-[var(--text-primary)]">Admin Panel</p>
-          <p className="text-[9px] text-[var(--text-tertiary)] uppercase tracking-widest">Root Access</p>
+          <p className="text-[11px] font-black uppercase tracking-widest text-(--text-primary)">Admin Panel</p>
+          <p className="text-[9px] text-(--text-tertiary) uppercase tracking-widest">Root Access</p>
         </div>
       </div>
 
@@ -49,8 +49,8 @@ export default function AdminSidebar({ lang }: { lang: string }) {
               href={href as any}
               className={`flex items-center gap-2.5 px-3 py-2.5 mx-2 my-0.5 text-sm font-medium rounded-md transition-all ${
                 isActive
-                  ? 'bg-[var(--surface)] text-[var(--purple)]'
-                  : 'text-[var(--text-tertiary)] hover:bg-[var(--surface)] hover:text-[var(--text-primary)]'
+                  ? 'bg-(--surface) text-(--purple)'
+                  : 'text-(--text-tertiary) hover:bg-(--surface) hover:text-(--text-primary)'
               }`}
             >
               <Icon className="w-4 h-4 shrink-0" />
@@ -61,14 +61,14 @@ export default function AdminSidebar({ lang }: { lang: string }) {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-[var(--border)] space-y-2">
+      <div className="p-4 border-t border-(--border) space-y-2">
         <div className="flex items-center justify-between px-3 py-2">
-          <span className="text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)]">Theme</span>
+          <span className="text-[10px] font-black uppercase tracking-widest text-(--text-tertiary)">Theme</span>
           <ThemeToggle />
         </div>
         <button
           onClick={() => signOut({ callbackUrl: `/${lang}/login` as any })}
-          className="flex items-center gap-2 w-full px-3 py-2 rounded-md text-[10px] font-black uppercase tracking-widest text-[var(--text-tertiary)] hover:text-[var(--error)] hover:bg-[var(--error)]/10 transition-all"
+          className="flex items-center gap-2 w-full px-3 py-2 rounded-md text-[10px] font-black uppercase tracking-widest text-(--text-tertiary) hover:text-(--error) hover:bg-(--error)/10 transition-all"
         >
           <LogOut className="w-4 h-4" />
           Sign Out

@@ -12,9 +12,9 @@ export default async function AdminLayout({ children, params }: { children: Reac
   }
 
   return (
-    <div className="flex h-screen bg-[var(--bg-base)] overflow-hidden">
+    <div className="flex h-screen bg-(--bg-base) overflow-hidden">
       <AdminSidebar lang={lang} />
-      <main className="flex-1 overflow-y-auto bg-[var(--bg-elevated)]">
+      <main className="flex-1 overflow-y-auto bg-(--bg-elevated)">
         {children}
       </main>
     </div>

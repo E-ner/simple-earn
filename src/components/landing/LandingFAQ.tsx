@@ -35,24 +35,24 @@ export default function LandingFAQ() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
 
   return (
-    <section id="faq" className="py-40 relative border-y border-[var(--border)] overflow-hidden">
+    <section id="faq" className="py-40 relative border-y border-(--border) overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--accent)]/5 rounded-full blur-[120px] -mr-64 -mt-64 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[var(--purple)]/5 rounded-full blur-[120px] -ml-64 -mb-64 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-(--accent)/5 rounded-full blur-[120px] -mr-64 -mt-64 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-(--purple)/5 rounded-full blur-[120px] -ml-64 -mb-64 pointer-events-none" />
 
       <div className="max-w-3xl mx-auto px-6 relative z-10">
         <div className="text-center mb-20">
           <motion.span 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-[10px] font-black text-[var(--accent)] tracking-[0.5em] uppercase mb-4 block"
+            className="text-[10px] font-black text-(--accent) tracking-[0.5em] uppercase mb-4 block"
           >
             Knowledge Base
           </motion.span>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-black text-[var(--text-primary)] tracking-tighter"
+            className="text-4xl md:text-5xl font-black text-(--text-primary) tracking-tighter"
           >
             Common Questions
           </motion.h2>
@@ -67,21 +67,21 @@ export default function LandingFAQ() {
               transition={{ delay: i * 0.05 }}
               className={`border rounded-2xl overflow-hidden transition-all duration-300 ${
                 openFaq === i 
-                  ? 'border-[var(--accent)] bg-[var(--surface-2)] shadow-[0_0_40px_rgba(var(--accent-rgb),0.1)]' 
-                  : 'border-[var(--border)] bg-[var(--surface)] hover:border-[var(--border-hover)]'
+                  ? 'border-(--accent) bg-(--surface-2) shadow-[0_0_40px_rgba(var(--accent-rgb),0.1)]' 
+                  : 'border-(--border) bg-(--surface) hover:border-(--border-hover)'
               }`}
             >
               <button 
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 className="w-full px-8 py-7 flex items-center justify-between text-left gap-4"
               >
-                <span className={`text-sm font-bold transition-colors ${openFaq === i ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)]'}`}>
+                <span className={`text-sm font-bold transition-colors ${openFaq === i ? 'text-(--text-primary)' : 'text-(--text-secondary)'}`}>
                   {faq.q}
                 </span>
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${openFaq === i ? 'bg-[var(--accent)] rotate-180' : 'bg-[var(--border)]'}`}>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${openFaq === i ? 'bg-(--accent) rotate-180' : 'bg-(--border)'}`}>
                   {openFaq === i
                     ? <Minus className="w-3 h-3 text-white" />
-                    : <Plus className="w-3 h-3 text-[var(--text-tertiary)]" />
+                    : <Plus className="w-3 h-3 text-(--text-tertiary)" />
                   }
                 </div>
               </button>
@@ -94,7 +94,7 @@ export default function LandingFAQ() {
                     transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
                     className="overflow-hidden"
                   >
-                    <div className="px-8 pb-8 text-sm text-[var(--text-secondary)] leading-relaxed border-t border-[var(--border)]/50 pt-5">
+                    <div className="px-8 pb-8 text-sm text-(--text-secondary) leading-relaxed border-t border-(--border)/50 pt-5">
                       {faq.a}
                     </div>
                   </motion.div>

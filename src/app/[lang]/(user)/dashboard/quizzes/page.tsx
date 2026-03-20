@@ -37,7 +37,7 @@ export default function QuizzesPage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--accent)]" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-(--accent)" />
       </div>
     )
   }
@@ -46,7 +46,7 @@ export default function QuizzesPage() {
     <div className="space-y-8">
       <div>
         <h1 className="section-title mb-2">Daily Quizzes</h1>
-        <p className="text-[var(--text-secondary)]">Test your knowledge and earn rewards. New quizzes available daily.</p>
+        <p className="text-(--text-secondary)">Test your knowledge and earn rewards. New quizzes available daily.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -56,28 +56,28 @@ export default function QuizzesPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className={`p-6 rounded-md border bg-[#16161e] border-white/[0.06] flex flex-col ${quiz.isCompletedToday ? 'opacity-60 cursor-not-allowed' : 'hover:border-[var(--accent)]/30 transition-all'}`}
+            className={`p-6 rounded-md border bg-(--surface-2) border-(--border) flex flex-col ${quiz.isCompletedToday ? 'opacity-60 cursor-not-allowed' : 'hover:border-(--accent)/30 transition-all'}`}
           >
             <div className="flex justify-between items-start mb-4">
-              <div className="w-10 h-10 rounded-md bg-white/[0.03] border border-white/5 flex items-center justify-center text-lg">
-                <Brain className="w-5 h-5 text-[var(--accent)]" />
+              <div className="w-10 h-10 rounded-md bg-(--surface-3) border border-(--border) flex items-center justify-center text-lg">
+                <Brain className="w-5 h-5 text-(--accent)" />
               </div>
-              <span className="text-[10px] font-black tracking-widest uppercase px-2 py-1 rounded-sm bg-green-500/10 text-green-500 border border-green-500/20">+$ {Number(quiz.reward).toFixed(2)}</span>
+              <span className="text-[10px] font-black tracking-widest uppercase px-2 py-1 rounded-sm bg-(--success)/10 text-(--success) border border-(--success)/20">+$ {Number(quiz.reward).toFixed(2)}</span>
             </div>
             
-            <h3 className="font-display font-bold text-xl text-[var(--text-primary)] mb-2 mt-auto">
+            <h3 className="font-display font-bold text-xl text-(--text-primary) mb-2 mt-auto">
               {quiz.title}
             </h3>
-            <p className="text-sm text-[var(--text-secondary)] mb-6 line-clamp-2">
+            <p className="text-sm text-(--text-secondary) mb-6 line-clamp-2">
               {quiz.description}
             </p>
 
             {quiz.isCompletedToday ? (
-              <button disabled className="h-10 rounded-md bg-black/40 text-[#444] text-[10px] font-black uppercase tracking-widest border border-white/5 cursor-not-allowed">
+              <button disabled className="h-10 rounded-md bg-(--surface-3) text-(--text-tertiary) text-[10px] font-black uppercase tracking-widest border border-(--border) cursor-not-allowed">
                 Validated
               </button>
             ) : (
-              <Link href={`/${lang}/dashboard/quizzes/${quiz.id}`} className="h-10 rounded-md bg-white text-black text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 transition-colors flex items-center justify-center">
+              <Link href={`/${lang}/dashboard/quizzes/${quiz.id}`} className="h-10 rounded-md bg-(--text-primary) text-(--bg-base) text-[10px] font-black uppercase tracking-widest hover:scale-[1.02] transition-transform flex items-center justify-center">
                 Initialize Analysis
               </Link>
             )}

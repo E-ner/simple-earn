@@ -115,6 +115,9 @@ export async function initiateWithdrawal(amount: number, method: string, address
   if (!dbUser || Number(dbUser.mainBalance) < amount) {
     throw new Error('Insufficient balance')
   }
+  if (amount < 5) {
+    throw new Error('Minimum withdrawal is $5')
+  }
 
   await prisma.protocolTransaction.create({
     data: {

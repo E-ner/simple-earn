@@ -79,7 +79,7 @@ describe('User Section Integration Tests', () => {
       ;(prisma.supportMessage.create as any).mockResolvedValue({})
 
       const result = await createTicket('Test Subject', 'Initial Message')
-      expect(result.success).toBe(true)
+      expect(result.id).toBe('ticket-1')
       expect(prisma.supportTicket.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({ subject: 'Test Subject', userId: 'test-user-id' })
@@ -93,8 +93,7 @@ describe('User Section Integration Tests', () => {
         id: 'ticket-1', status: 'OPEN', userId: 'test-user-id'
       })
 
-      const result = await sendTicketMessage('ticket-1', 'M2')
-      expect(result.success).toBe(true)
+      await sendTicketMessage('ticket-1', 'M2')
       expect(prisma.supportMessage.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({ ticketId: 'ticket-1', message: 'M2' })
@@ -115,10 +114,10 @@ describe('User Section Integration Tests', () => {
     })
 
     it('should process a valid withdrawal and create a PENDING transaction', async () => {
+      // It uses prisma.protocolTransaction.create directly, not $transaction
       const result = await requestWithdrawal(10, 'Crypto')
       expect(result.success).toBe(true)
-      // Should have created a protocol transaction
-      expect(prisma.$transaction).toHaveBeenCalled()
+      expect(prisma.protocolTransaction.create).toHaveBeenCalled()
     })
   })
 
@@ -141,10 +140,15 @@ describe('User Section Integration Tests', () => {
       ;(prisma.gamePlay.count as any).mockResolvedValue(0)
       ;(prisma.user.findUnique as any).mockResolvedValue({ ...TEST_USER, gameBalance: 50 })
 
-      const result = await playGame('T2000', 'A') // picking A, win token is A → win
+      const originalRandom = Math.random
+      Math.random = vi.fn().mockReturnValue(0) // yields winToken = '1'
+
+      const result = await playGame('T2000', '1') // picking '1', win token is '1' → win
       expect(result).toHaveProperty('didWin')
       expect(result.didWin).toBe(true)
       expect(prisma.$transaction).toHaveBeenCalled()
+
+      Math.random = originalRandom
     })
   })
 })

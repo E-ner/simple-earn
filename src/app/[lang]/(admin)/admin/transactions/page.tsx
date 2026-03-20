@@ -15,10 +15,23 @@ export default async function TransactionsPage({ params }: { params: Promise<{ l
           <CreditCard className="w-5 h-5 text-purple-500" />
           <span className="text-[10px] font-black text-purple-500 uppercase tracking-widest">Transaction Management</span>
         </div>
-        <h1 className="text-2xl font-black text-white tracking-tighter">
-          All Transactions <span className="text-gray-500">({total})</span>
+        <h1 className="text-2xl font-black text-(--text-primary) tracking-tighter">
+          All Transactions <span className="text-(--text-tertiary)">({total})</span>
         </h1>
       </div>
+
+      {/* Start of the new structure based on the provided snippet */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-8">
+        <div className="flex-1 rounded-md bg-(--surface) text-(--text-primary) border border-(--border) flex items-center px-4 h-12">
+          <Search className="w-5 h-5 text-(--text-tertiary) mr-3" />
+          <input
+            type="text"
+            placeholder="Search tx ID, User ID..."
+            className="bg-transparent border-none outline-none w-full text-sm font-mono placeholder-(--text-tertiary)"
+          />
+        </div>
+      </div>
+      {/* End of the new structure */}
 
       <TransactionsTable transactions={transactions} />
     </div>

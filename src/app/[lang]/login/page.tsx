@@ -43,31 +43,31 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg-base)] flex">
+    <div className="min-h-screen bg-(--bg-base) flex">
       {/* Left side - Brand/Illustration */}
-      <div className="hidden lg:flex lg:w-1/2 p-12 flex-col justify-between border-r border-[var(--border)] relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[var(--bg-overlay)] to-[var(--bg-elevated)]" />
+      <div className="hidden lg:flex lg:w-1/2 p-12 flex-col justify-between border-r border-(--border) relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-(--bg-overlay) to-(--bg-elevated)" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_left_center,var(--accent-muted),transparent_50%)]" />
         
         <div className="relative z-10">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded bg-[var(--accent)] flex items-center justify-center">
-              <span className="text-[var(--text-inverse)] font-bold text-lg leading-none">S</span>
+            <div className="w-8 h-8 rounded bg-(--accent) flex items-center justify-center">
+              <span className="text-(--text-inverse) font-bold text-lg leading-none">S</span>
             </div>
-            <span className="font-display font-bold text-xl tracking-tight text-[var(--text-primary)]">Simple Earn</span>
+            <span className="font-display font-bold text-xl tracking-tight text-(--text-primary)">Simple Earn</span>
           </Link>
         </div>
 
         <div className="relative z-10 max-w-md">
-          <h1 className="text-4xl font-display font-bold tracking-tight mb-4 text-[var(--text-primary)]">
+          <h1 className="text-4xl font-display font-bold tracking-tight mb-4 text-(--text-primary)">
             Welcome back to your earning journey.
           </h1>
-          <p className="text-[var(--text-secondary)] text-lg">
+          <p className="text-(--text-secondary) text-lg">
             Log in to continue completing quizzes, watching videos, and playing token games.
           </p>
         </div>
         
-        <div className="relative z-10 text-[var(--text-tertiary)] font-mono text-sm">
+        <div className="relative z-10 text-(--text-tertiary) font-mono text-sm">
           © {new Date().getFullYear()} Simple Earn. All rights reserved.
         </div>
       </div>
@@ -76,8 +76,8 @@ export default function LoginPage() {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl font-display font-bold tracking-tight text-[var(--text-primary)]">Log in</h2>
-            <p className="mt-2 text-[var(--text-secondary)]">
+            <h2 className="text-3xl font-display font-bold tracking-tight text-(--text-primary)">Log in</h2>
+            <p className="mt-2 text-(--text-secondary)">
               Enter your credentials to access your account
             </p>
           </div>
@@ -85,7 +85,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5 font-learn">
+                <label className="block text-sm font-medium text-(--text-secondary) mb-1.5 font-learn">
                   Email Address
                 </label>
                 <input
@@ -96,7 +96,7 @@ export default function LoginPage() {
                   disabled={isSubmitting}
                 />
                 {errors.email && (
-                  <p className="mt-1.5 text-sm text-[var(--error)]" role="alert">
+                  <p className="mt-1.5 text-sm text-(--error)" role="alert">
                     {errors.email.message}
                   </p>
                 )}
@@ -104,10 +104,10 @@ export default function LoginPage() {
 
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-sm font-medium text-[var(--text-secondary)] font-learn">
+                  <label className="block text-sm font-medium text-(--text-secondary) font-learn">
                     Password
                   </label>
-                  <Link href={"/en/forgot-password" as any} className="text-sm font-medium text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors">
+                  <Link href={"/en/forgot-password" as any} className="text-sm font-medium text-(--accent) hover:text-(--accent-hover) transition-colors">
                     Forgot password?
                   </Link>
                 </div>
@@ -119,7 +119,7 @@ export default function LoginPage() {
                   disabled={isSubmitting}
                 />
                 {errors.password && (
-                  <p className="mt-1.5 text-sm text-[var(--error)]" role="alert">
+                  <p className="mt-1.5 text-sm text-(--error)" role="alert">
                     {errors.password.message}
                   </p>
                 )}
@@ -127,8 +127,8 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-[var(--radius-sm)]">
-                <p className="text-sm text-[var(--error)] text-center font-medium" role="alert">
+              <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-(--radius-sm)">
+                <p className="text-sm text-(--error) text-center font-medium" role="alert">
                   {error}
                 </p>
               </div>
@@ -150,9 +150,9 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="text-center text-sm text-[var(--text-secondary)]">
+          <p className="text-center text-sm text-(--text-secondary)">
             Don't have an account?{' '}
-            <Link href={"/en/register" as any} className="font-medium text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors">
+            <Link href={"/en/register" as any} className="font-medium text-(--text-primary) hover:text-(--accent) transition-colors">
               Sign up
             </Link>
           </p>

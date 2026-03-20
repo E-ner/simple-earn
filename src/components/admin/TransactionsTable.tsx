@@ -16,22 +16,22 @@ export default function TransactionsTable({ transactions }: { transactions: any[
   const [selectedProof, setSelectedProof] = useState<string | null>(null)
 
   return (
-    <div className="border border-white/10 rounded-xl overflow-hidden bg-[#0d0d12]">
+    <div className="border border-(--border) rounded-xl overflow-hidden bg-(--surface)">
       <div className="overflow-x-auto">
         <table className="w-full text-xs text-left">
-          <thead className="bg-white/[0.02] border-b border-white/5">
+          <thead className="bg-(--surface-2) border-b border-(--border)">
             <tr>
               {['User', 'Type', 'Amount', 'Status', 'Method', 'Receipt', 'Date', 'Actions'].map(h => (
                 <th key={h} className="px-6 py-4 text-[10px] font-black text-[#555] uppercase tracking-widest">{h}</th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/[0.05]">
+          <tbody className="divide-y divide-(--border)">
             {transactions.map((tx: any) => (
-              <tr key={tx.id} className="hover:bg-white/[0.02] transition-colors">
+              <tr key={tx.id} className="hover:bg-(--surface-3) transition-colors">
                 <td className="px-6 py-4">
-                  <p className="font-bold text-white">{tx.user?.username}</p>
-                  <p className="text-[#555] text-[10px]">{tx.user?.email}</p>
+                  <p className="font-bold text-(--text-primary)">{tx.user?.username}</p>
+                  <p className="text-(--text-secondary) text-[10px]">{tx.user?.email}</p>
                 </td>
                 <td className="px-6 py-4 font-mono font-bold text-[#888]">{tx.type}</td>
                 <td className="px-6 py-4 font-mono font-black text-green-500">${Number(tx.amount).toFixed(2)}</td>
@@ -85,7 +85,7 @@ export default function TransactionsTable({ transactions }: { transactions: any[
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedProof(null)}
-            className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-8 backdrop-blur-md"
+            className="fixed inset-0 z-[100] bg-(--bg-base)/80 flex items-center justify-center p-8 backdrop-blur-md"
           >
             <motion.div 
               initial={{ scale: 0.9, opacity: 0 }}
@@ -102,7 +102,7 @@ export default function TransactionsTable({ transactions }: { transactions: any[
                    <XCircle />
                  </button>
                </div>
-               <div className="w-full h-full rounded-2xl border border-white/10 overflow-hidden shadow-2xl bg-black">
+               <div className="w-full h-full rounded-2xl border border-(--border) overflow-hidden bg-(--surface)">
                  <img src={selectedProof} alt="Full Proof" className="w-full h-full object-contain" />
                </div>
             </motion.div>

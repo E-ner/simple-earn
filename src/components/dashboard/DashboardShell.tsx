@@ -13,7 +13,7 @@ export default function DashboardShell({ children, user }: DashboardShellProps) 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[var(--bg-base)]">
+    <div className="flex h-screen overflow-hidden bg-(--bg-base)">
       {/* Desktop Sidebar */}
       <div className="hidden md:flex">
         <Sidebar userRole={user.role} />
@@ -34,7 +34,7 @@ export default function DashboardShell({ children, user }: DashboardShellProps) 
 
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Header user={user} onMenuClick={() => setIsSidebarOpen(true)} />
-        <main className="flex-1 overflow-y-auto bg-[var(--bg-elevated)] p-4 md:p-8">
+        <main className="flex-1 overflow-y-auto bg-(--bg-elevated) p-4 md:p-8">
           <div className="mx-auto max-w-6xl">
             {children}
           </div>

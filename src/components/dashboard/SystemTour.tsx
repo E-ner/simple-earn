@@ -25,13 +25,13 @@ export default function SystemTour({ isOpen, onClose, dict }: SystemTourProps) {
       title: dict?.tour?.welcome_title || 'Welcome to Simple Earn',
       content: dict?.tour?.welcome_desc || 'This tour will guide you through the main features of your decentralized earning dashboard.',
       target: 'header',
-      icon: <Zap className="w-5 h-5 text-[var(--accent)]" />
+      icon: <Zap className="w-5 h-5 text-(--accent)" />
     },
     {
       title: dict?.tour?.balances_title || 'Your Balances',
       content: dict?.tour?.balances_desc || 'Monitor your Main Balance (withdrawals) and Game Balance (for playing games) in real-time.',
       target: '#balance-cards',
-      icon: <Wallet className="w-5 h-5 text-[var(--purple)]" />
+      icon: <Wallet className="w-5 h-5 text-(--purple)" />
     },
     {
       title: dict?.tour?.tasks_title || 'Daily Earning Tasks',
@@ -88,31 +88,31 @@ export default function SystemTour({ isOpen, onClose, dict }: SystemTourProps) {
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        className="relative w-full max-w-lg bg-[var(--surface)] border border-[var(--border)] rounded-[32px] overflow-hidden"
+        className="relative w-full max-w-lg bg-(--surface) border border-(--border) rounded-[32px] overflow-hidden"
       >
         <div className="p-8">
           <div className="flex justify-between items-start mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-(--surface-2) border border-(--border) flex items-center justify-center">
                 {steps[currentStep].icon}
               </div>
               <div>
-                <h4 className="text-[var(--text-primary)] font-bold">{steps[currentStep].title}</h4>
-                <p className="text-[10px] text-[var(--accent)] font-bold uppercase tracking-widest">
+                <h4 className="text-(--text-primary) font-bold">{steps[currentStep].title}</h4>
+                <p className="text-[10px] text-(--accent) font-bold uppercase tracking-widest">
                   Step {currentStep + 1} of {steps.length}
                 </p>
               </div>
             </div>
             <button 
               onClick={onClose}
-              className="p-2 rounded-full hover:bg-[var(--surface-2)] transition-colors"
+              className="p-2 rounded-full hover:bg-(--surface-2) transition-colors"
             >
-              <X className="w-5 h-5 text-[var(--text-tertiary)]" />
+              <X className="w-5 h-5 text-(--text-tertiary)" />
             </button>
           </div>
 
           <div className="space-y-4">
-            <p className="text-[var(--text-tertiary)] leading-relaxed">
+            <p className="text-(--text-tertiary) leading-relaxed">
               {steps[currentStep].content}
             </p>
           </div>
@@ -122,7 +122,7 @@ export default function SystemTour({ isOpen, onClose, dict }: SystemTourProps) {
               {steps.map((_, i) => (
                 <div 
                   key={i}
-                  className={`h-1 rounded-full transition-all duration-300 ${i === currentStep ? 'w-8 bg-[var(--accent)]' : 'w-2 bg-[var(--surface-3)]'}`}
+                  className={`h-1 rounded-full transition-all duration-300 ${i === currentStep ? 'w-8 bg-(--accent)' : 'w-2 bg-(--surface-3)'}`}
                 />
               ))}
             </div>
@@ -131,7 +131,7 @@ export default function SystemTour({ isOpen, onClose, dict }: SystemTourProps) {
               {currentStep > 0 && (
                 <button 
                   onClick={handlePrev}
-                  className="h-10 px-6 rounded-full border border-[var(--border)] text-[var(--text-primary)] text-xs font-bold hover:bg-[var(--surface-2)] transition-colors flex items-center gap-2"
+                  className="h-10 px-6 rounded-full border border-(--border) text-(--text-primary) text-xs font-bold hover:bg-(--surface-2) transition-colors flex items-center gap-2"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   Back
@@ -139,7 +139,7 @@ export default function SystemTour({ isOpen, onClose, dict }: SystemTourProps) {
               )}
               <button 
                 onClick={handleNext}
-                className="h-10 px-6 rounded-full bg-[var(--text-primary)] text-[var(--bg-main)] text-xs font-bold hover:opacity-90 transition-colors flex items-center gap-2"
+                  className="h-10 px-6 rounded-full border border-(--border) text-(--text-primary) text-xs font-bold hover:bg-(--surface-2) transition-colors flex items-center gap-2"
               >
                 {currentStep === steps.length - 1 ? 'Finish' : 'Continue'}
                 {currentStep < steps.length - 1 && <ChevronRight className="w-4 h-4" />}

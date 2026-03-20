@@ -8,8 +8,8 @@ export default async function AdminSupportPage() {
   return (
     <div className="p-8 max-w-6xl mx-auto flex flex-col h-[calc(100vh-2rem)]">
       <div className="mb-6 shrink-0">
-        <h1 className="text-2xl font-black text-[var(--text-primary)] tracking-tight">Support Inquiries</h1>
-        <p className="text-sm text-[var(--text-tertiary)] mt-1">Review user feedback and resolve tickets.</p>
+        <h1 className="text-2xl font-black text-(--text-primary) tracking-tight">Support Inquiries</h1>
+        <p className="text-sm text-(--text-tertiary) mt-1">Review user feedback and resolve tickets.</p>
       </div>
       <SupportClient initialTickets={tickets} />
     </div>

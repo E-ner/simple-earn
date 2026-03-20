@@ -26,13 +26,13 @@ export default function LandingPage() {
   }, [lang])
 
   if (!dict) return (
-    <div className="min-h-screen bg-[var(--bg-base)] flex items-center justify-center">
-       <div className="w-8 h-8 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
+    <div className="min-h-screen bg-(--bg-base) flex items-center justify-center">
+       <div className="w-8 h-8 border-2 border-(--accent) border-t-transparent rounded-full animate-spin" />
     </div>
   )
 
   return (
-    <div className="bg-[var(--bg-base)] text-[var(--text-primary)] min-h-screen font-sans selection:bg-[var(--accent)] selection:text-[var(--text-inverse)]">
+    <div className="bg-(--bg-base) text-(--text-primary) min-h-screen font-sans selection:bg-(--accent) selection:text-(--text-inverse)">
       {/* Grid infrastructure */}
       <div className="fixed inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-[size:64px_64px] pointer-events-none z-0" />
 

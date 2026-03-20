@@ -43,7 +43,7 @@ export default function TransactionsPage() {
   if (loading) {
     return (
       <div className="h-96 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-[var(--accent)] animate-spin" />
+        <Loader2 className="w-8 h-8 text-(--accent) animate-spin" />
       </div>
     )
   }
@@ -70,8 +70,8 @@ export default function TransactionsPage() {
   return (
     <div className="pb-20">
       <header className="mb-10">
-        <h1 className="text-3xl font-bold text-white tracking-tight">{dict?.transactions?.title || 'Audit Log'}</h1>
-        <p className="text-[#888] mt-2">{dict?.transactions?.desc || 'Complete history of all node operations and capital movements.'}</p>
+        <h1 className="text-3xl font-bold text-(--text-primary) tracking-tight">{dict?.transactions?.title || 'Audit Log'}</h1>
+        <p className="text-(--text-secondary) mt-2">{dict?.transactions?.desc || 'Complete history of all node operations and capital movements.'}</p>
       </header>
 
       {/* Filters */}
@@ -83,14 +83,14 @@ export default function TransactionsPage() {
             placeholder="Search transactions..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full h-12 bg-[#0d0d14] border border-white/5 rounded-md pl-12 pr-4 text-sm text-white focus:border-[var(--accent)] outline-none transition-all"
+            className="w-full h-12 bg-(--surface-2) border border-(--border) rounded-md pl-12 pr-4 text-sm text-(--text-primary) focus:border-(--accent) outline-none transition-all"
           />
         </div>
         <div className="flex gap-2">
           <select 
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="h-12 bg-[#0d0d14] border border-white/5 rounded-md px-4 text-xs font-bold uppercase tracking-widest text-[#888] outline-none focus:border-[var(--accent)] transition-all cursor-pointer"
+            className="h-12 bg-(--surface-2) border border-(--border) rounded-md px-4 text-xs font-bold uppercase tracking-widest text-(--text-secondary) outline-none focus:border-(--accent) transition-all cursor-pointer"
           >
             <option value="ALL">All Types</option>
             <option value="EARNING">Earnings</option>
@@ -107,19 +107,19 @@ export default function TransactionsPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-white/[0.05] bg-white/[0.02]">
-                <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-[#555]">Protocol/Date</th>
+              <tr className="border-b border-(--border) bg-(--surface-2)">
+                <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-(--text-secondary)">Protocol/Date</th>
                 <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-[#555]">Type</th>
                 <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-[#555]">Status</th>
                 <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-[#555] text-right">Amount</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.02]">
+            <tbody className="divide-y divide-(--border)">
               {filteredTransactions.map((tx) => (
-                <tr key={tx.id} className="hover:bg-white/[0.01] transition-colors group">
+                <tr key={tx.id} className="hover:bg-(--surface-3) transition-colors group">
                   <td className="px-6 py-5">
                     <div className="flex flex-col">
-                      <span className="text-sm font-bold text-white group-hover:text-[var(--accent)] transition-colors">{tx.notes || tx.type.replace('_', ' ')}</span>
+                      <span className="text-sm font-bold text-(--text-primary) group-hover:text-(--accent) transition-colors">{tx.notes || tx.type.replace('_', ' ')}</span>
                       <span className="text-[10px] text-[#555] font-mono mt-0.5">{new Date(tx.createdAt).toLocaleString()}</span>
                     </div>
                   </td>
@@ -151,8 +151,8 @@ export default function TransactionsPage() {
         </div>
         {filteredTransactions.length === 0 && (
           <div className="py-20 text-center">
-            <div className="bg-[#1a1a24] w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/5">
-              <Filter className="w-5 h-5 text-[#333]" />
+            <div className="bg-(--surface-2) w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-(--border)">
+              <Filter className="w-5 h-5 text-(--text-tertiary)" />
             </div>
             <h3 className="text-[10px] font-black text-[#555] uppercase tracking-[0.2em]">No relevant protocols found</h3>
             <p className="text-[9px] text-[#333] mt-1 uppercase">Adjust your parameters or initiate new node cycles.</p>

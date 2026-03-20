@@ -15,6 +15,14 @@ vi.mock('bcryptjs', () => ({
   default: { hash: vi.fn().mockResolvedValue('hashed-password') }
 }))
 
+vi.mock('nodemailer', () => ({
+  default: {
+    createTransport: vi.fn().mockReturnValue({
+      sendMail: vi.fn().mockResolvedValue({})
+    })
+  }
+}))
+
 describe('Register API', () => {
   beforeEach(() => {
     vi.clearAllMocks()

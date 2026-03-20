@@ -19,13 +19,13 @@ export default function AdminCharts({ userGrowth, cashflow, statusDistribution }
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6 bg-[var(--surface)] border border-[var(--border)] rounded-xl"
+        className="p-6 bg-(--surface) border border-(--border) rounded-xl"
       >
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-8 h-8 rounded-lg bg-[var(--purple)]/10 flex items-center justify-center">
-            <Users className="w-4 h-4 text-[var(--purple)]" />
+          <div className="w-8 h-8 rounded-lg bg-(--purple)/10 flex items-center justify-center">
+            <Users className="w-4 h-4 text-(--purple)" />
           </div>
-          <h3 className="text-xs font-black text-[var(--text-primary)] uppercase tracking-widest">User Growth (30D)</h3>
+          <h3 className="text-xs font-black text-(--text-primary) uppercase tracking-widest">User Growth (30D)</h3>
         </div>
         <div className="h-[250px] w-full">
           <ResponsiveContainer width="100%" height="100%">
@@ -47,13 +47,13 @@ export default function AdminCharts({ userGrowth, cashflow, statusDistribution }
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6 bg-[var(--surface)] border border-[var(--border)] rounded-xl"
+        className="p-6 bg-(--surface) border border-(--border) rounded-xl"
       >
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-8 h-8 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center">
-            <TrendingUp className="w-4 h-4 text-[var(--accent)]" />
+          <div className="w-8 h-8 rounded-lg bg-(--accent)/10 flex items-center justify-center">
+            <TrendingUp className="w-4 h-4 text-(--accent)" />
           </div>
-          <h3 className="text-xs font-black text-[var(--text-primary)] uppercase tracking-widest">Platform Cashflow</h3>
+          <h3 className="text-xs font-black text-(--text-primary) uppercase tracking-widest">Platform Cashflow</h3>
         </div>
         <div className="h-[250px] w-full">
           <ResponsiveContainer width="100%" height="100%">
@@ -74,8 +74,8 @@ export default function AdminCharts({ userGrowth, cashflow, statusDistribution }
 
       {/* Second Row: Status & distribution */}
       <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-1 p-6 bg-[var(--surface)] border border-[var(--border)] rounded-xl">
-           <h3 className="text-xs font-black text-[var(--text-primary)] uppercase tracking-widest mb-6">Account Status</h3>
+        <div className="md:col-span-1 p-6 bg-(--surface) border border-(--border) rounded-xl">
+           <h3 className="text-xs font-black text-(--text-primary) uppercase tracking-widest mb-6">Account Status</h3>
            <div className="h-[200px] w-full">
              <ResponsiveContainer width="100%" height="100%">
                <PieChart>
@@ -99,40 +99,40 @@ export default function AdminCharts({ userGrowth, cashflow, statusDistribution }
                <div key={entry.name} className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest">
                  <div className="flex items-center gap-2">
                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
-                   <span className="text-[var(--text-tertiary)]">{entry.name}</span>
+                   <span className="text-(--text-tertiary)">{entry.name}</span>
                  </div>
-                 <span className="text-[var(--text-primary)]">{entry.value}</span>
+                 <span className="text-(--text-primary)">{entry.value}</span>
                </div>
              ))}
            </div>
         </div>
 
-        <div className="md:col-span-2 p-6 bg-[var(--surface)] border border-[var(--border)] rounded-xl relative overflow-hidden">
-           <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--accent)]/5 rounded-full blur-3xl -mr-16 -mt-16" />
-           <h3 className="text-xs font-black text-[var(--text-primary)] uppercase tracking-widest mb-8">Platform Health</h3>
+        <div className="md:col-span-2 p-6 bg-(--surface) border border-(--border) rounded-xl relative overflow-hidden">
+           <div className="absolute top-0 right-0 w-32 h-32 bg-(--accent)/5 rounded-full blur-3xl -mr-16 -mt-16" />
+           <h3 className="text-xs font-black text-(--text-primary) uppercase tracking-widest mb-8">Platform Health</h3>
            <div className="grid grid-cols-2 gap-8 relative z-10">
               <div className="space-y-4">
-                <div className="flex items-center gap-2 text-[var(--accent)]">
+                <div className="flex items-center gap-2 text-(--accent)">
                   <ArrowUpRight className="w-4 h-4" />
                   <span className="text-[10px] font-black uppercase tracking-widest">Inflow Efficiency</span>
                 </div>
                 <div className="text-3xl font-black text-white tracking-tighter font-mono">98.4%</div>
                 <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                   <div className="bg-[var(--accent)] h-full w-[98.4%]" />
+                   <div className="bg-(--accent) h-full w-[98.4%]" />
                 </div>
               </div>
               <div className="space-y-4">
-                <div className="flex items-center gap-2 text-[var(--purple)]">
+                <div className="flex items-center gap-2 text-(--purple)">
                   <TrendingUp className="w-4 h-4" />
                   <span className="text-[10px] font-black uppercase tracking-widest">Protocol Staking</span>
                 </div>
                 <div className="text-3xl font-black text-white tracking-tighter font-mono">$1,240.20</div>
                 <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
-                   <div className="bg-[var(--purple)] h-full w-[72%]" />
+                   <div className="bg-(--purple) h-full w-[72%]" />
                 </div>
               </div>
            </div>
-           <p className="mt-10 text-[10px] text-[var(--text-tertiary)] uppercase font-bold tracking-widest leading-relaxed">
+           <p className="mt-10 text-[10px] text-(--text-tertiary) uppercase font-bold tracking-widest leading-relaxed">
              Protocol health is determined by active node participation and transaction approval latency. Currently performing within optimal parameters.
            </p>
         </div>

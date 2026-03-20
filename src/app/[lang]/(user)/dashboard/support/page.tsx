@@ -56,7 +56,7 @@ export default function SupportPage() {
   if (loading) {
     return (
       <div className="h-96 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-[var(--accent)] animate-spin" />
+        <Loader2 className="w-8 h-8 text-(--accent) animate-spin" />
       </div>
     )
   }
@@ -72,7 +72,7 @@ export default function SupportPage() {
         </div>
         <button 
           onClick={() => setIsCreating(!isCreating)}
-          className="h-10 px-6 rounded-md bg-[var(--accent)] text-black text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[var(--accent-hover)] transition-colors"
+          className="h-10 px-6 rounded-md bg-(--accent) text-black text-xs font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-(--accent-hover) transition-colors"
         >
           {isCreating ? 'Cancel Request' : <><Plus className="w-4 h-4" /> Open Ticket</>}
         </button>
@@ -82,7 +82,7 @@ export default function SupportPage() {
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-8 rounded-md bg-white/[0.02] border border-[var(--accent)]/20 relative"
+          className="p-8 rounded-md bg-white/[0.02] border border-(--accent)/20 relative"
         >
           <form onSubmit={handleCreateTicket} className="space-y-6">
             <div className="space-y-2">
@@ -126,8 +126,8 @@ export default function SupportPage() {
             >
               <div className="flex items-center gap-6">
                 <div className={`w-12 h-12 rounded-md flex items-center justify-center ${
-                  ticket.status === 'OPEN' ? 'bg-[var(--accent)]/10 text-[var(--accent)]' :
-                  ticket.status === 'IN_PROGRESS' ? 'bg-[var(--purple)]/10 text-[var(--purple)]' :
+                  ticket.status === 'OPEN' ? 'bg-(--accent)/10 text-(--accent)' :
+                  ticket.status === 'IN_PROGRESS' ? 'bg-(--purple)/10 text-(--purple)' :
                   'bg-white/5 text-[#444]'
                 }`}>
                   {ticket.status === 'OPEN' ? <AlertCircle className="w-5 h-5" /> : 
@@ -140,7 +140,7 @@ export default function SupportPage() {
                     <span className="text-[9px] font-black text-[#444] uppercase tracking-widest bg-white/5 px-2 py-0.5 rounded">
                       ID: {ticket.id.slice(0, 8).toUpperCase()}
                     </span>
-                    <h3 className="text-sm font-bold text-white group-hover:text-[var(--accent)] transition-colors">{ticket.subject}</h3>
+                    <h3 className="text-sm font-bold text-white group-hover:text-(--accent) transition-colors">{ticket.subject}</h3>
                   </div>
                   <p className="text-xs text-[#555] line-clamp-1 max-w-md">
                     {ticket.messages[0]?.message}

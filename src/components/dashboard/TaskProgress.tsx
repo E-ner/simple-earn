@@ -34,10 +34,10 @@ export default function TaskProgress({ quizStats, videoStats, dict, lang }: Task
           <div>
             <h3 className="section-label mb-1">{dict?.common?.quizzes || 'Daily Quizzes'}</h3>
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-display font-bold text-[var(--text-primary)]">
+              <span className="text-2xl font-display font-bold text-(--text-primary)">
                 {quizStats.completed} / {quizStats.total}
               </span>
-              <span className="text-sm text-[var(--text-secondary)] font-learn">
+              <span className="text-sm text-(--text-secondary) font-learn">
                 {dict?.dashboard?.completed || 'completed'}
               </span>
             </div>
@@ -50,7 +50,7 @@ export default function TaskProgress({ quizStats, videoStats, dict, lang }: Task
         </div>
 
         <div className="space-y-3">
-          <p className="text-sm text-[var(--text-secondary)] italic">
+          <p className="text-sm text-(--text-secondary) italic">
             {quizStats.completed === quizStats.total 
               ? (dict?.dashboard?.all_quizzes_done || "All daily quizzes completed! Check back tomorrow.")
               : (dict?.dashboard?.more_quizzes || `You have ${quizStats.total - quizStats.completed} more quizzes to complete today.`)}
@@ -71,12 +71,12 @@ export default function TaskProgress({ quizStats, videoStats, dict, lang }: Task
       >
         <div className="flex justify-between items-end mb-4">
           <div>
-            <h3 className="section-label mb-1 text-[var(--purple)]">{dict?.common?.videos || 'Video Tasks'}</h3>
+            <h3 className="section-label mb-1 text-(--purple)">{dict?.common?.videos || 'Video Tasks'}</h3>
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-display font-bold text-[var(--text-primary)]">
+              <span className="text-2xl font-display font-bold text-(--text-primary)">
                 {videoStats.watched} / {videoStats.total}
               </span>
-              <span className="text-sm text-[var(--text-secondary)] font-learn">
+              <span className="text-sm text-(--text-secondary) font-learn">
                 {dict?.dashboard?.watched || 'watched'}
               </span>
             </div>
@@ -85,10 +85,10 @@ export default function TaskProgress({ quizStats, videoStats, dict, lang }: Task
         </div>
         
         <div className="progress-track mb-5">
-          <div className="h-full bg-[var(--purple)] rounded-sm transition-[width] duration-1000 ease-out" style={{ width: `${videoPct}%` }} />
+          <div className="h-full bg-(--purple) rounded-sm transition-[width] duration-1000 ease-out" style={{ width: `${videoPct}%` }} />
         </div>
 
-        <Link href={`/${lang}/dashboard/videos`} className="btn w-full bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text-primary)] hover:bg-[var(--surface-3)]">
+        <Link href={`/${lang}/dashboard/videos`} className="btn w-full bg-(--surface-2) border border-(--border) text-(--text-primary) hover:bg-(--surface-3)">
           {dict?.dashboard?.go_to_videos || 'Go to Videos'}
         </Link>
       </motion.div>

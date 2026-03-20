@@ -1,40 +1,36 @@
-const { PrismaClient } = require('@prisma/client');
-const bcrypt = require('bcryptjs');
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Wiping existing data...");
+  console.log("Seeding default admin user...");
+  const adminEmail = process.env.ADMIN_EMAIL || 'neric5311@gmail.com';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin@123';
+  const passwordHash = await bcrypt.hash(adminPassword, 10);
   
-  // Wipe dependent tables first
-  await prisma.supportMessage.deleteMany({});
-  await prisma.supportTicket.deleteMany({});
-  await prisma.protocolTransaction.deleteMany({});
-  await prisma.gamePlay.deleteMany({});
-  await prisma.notification.deleteMany({});
-  
-  // Wipe users
-  await prisma.user.deleteMany({});
-  console.log("Users and dependent data deleted.");
-
-  console.log("Creating default admin user...");
-  const passwordHash = await bcrypt.hash('admin@123', 10);
-  
-  const admin = await prisma.user.create({
-    data: {
-      email: 'neric5311@gmail.com',
+  const admin = await prisma.user.upsert({
+    where: { email: adminEmail },
+    update: {
+      passwordHash,
+      role: 'ADMIN',
+      isActive: true,
+      isEmailVerified: true
+    },
+    create: {
+      email: adminEmail,
       username: 'admin',
       passwordHash,
       role: 'ADMIN',
-      isActive: true, // Auto-activated for admin
+      isActive: true,
       isEmailVerified: true,
       country: 'RW',
-      mainBalance: 100.00, // Give admin some starting test balance
+      mainBalance: 100.00,
       gameBalance: 50.00
     }
   });
 
-  console.log(`Admin created successfully: ${admin.email}`);
+  console.log(`Admin seeded successfully: ${admin.email}`);
 }
 
 main()

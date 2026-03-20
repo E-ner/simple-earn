@@ -74,13 +74,13 @@ export default function ActivatePage() {
   }
 
   if (loading) return (
-    <div className="h-screen flex items-center justify-center bg-[var(--bg-base)]">
-      <Loader2 className="w-8 h-8 text-[var(--accent)] animate-spin" />
+    <div className="h-screen flex items-center justify-center bg-(--bg-base)">
+      <Loader2 className="w-8 h-8 text-(--accent) animate-spin" />
     </div>
   )
 
   return (
-    <div className="min-h-screen bg-[var(--bg-base)] py-8 px-4 flex flex-col items-center">
+    <div className="min-h-screen bg-(--bg-base) py-8 px-4 flex flex-col items-center">
       <div className="max-w-md w-full space-y-8">
         <header className="flex items-center gap-4 mb-8">
           <button 
@@ -119,10 +119,10 @@ export default function ActivatePage() {
                 <button
                   key={m.id}
                   onClick={() => setSelectedMethod(m)}
-                  className={`p-4 rounded-md border text-left transition-all flex items-center justify-between ${selectedMethod?.id === m.id ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-white/5 bg-[#0d0d14]'}`}
+                  className={`p-4 rounded-md border text-left transition-all flex items-center justify-between ${selectedMethod?.id === m.id ? 'border-(--accent) bg-(--accent)/5' : 'border-white/5 bg-[#0d0d14]'}`}
                 >
                   <span className={`text-xs font-bold ${selectedMethod?.id === m.id ? 'text-white' : 'text-[#888]'}`}>{m.name}</span>
-                  {selectedMethod?.id === m.id && <Zap size={14} className="text-[var(--accent)]" />}
+                  {selectedMethod?.id === m.id && <Zap size={14} className="text-(--accent)" />}
                 </button>
               ))}
             </div>
@@ -133,9 +133,9 @@ export default function ActivatePage() {
             <motion.div 
                initial={{ opacity: 0, y: 5 }} 
                animate={{ opacity: 1, y: 0 }} 
-               className="p-5 rounded-md bg-[var(--accent)]/[0.02] border border-[var(--accent)]/10"
+               className="p-5 rounded-md bg-(--accent)/[0.02] border border-(--accent)/10"
             >
-              <h4 className="text-[10px] font-black text-[var(--accent)] uppercase tracking-widest mb-2">Instructions</h4>
+              <h4 className="text-[10px] font-black text-(--accent) uppercase tracking-widest mb-2">Instructions</h4>
               <p className="text-[11px] text-[#888] whitespace-pre-line font-mono leading-tight uppercase">
                 {selectedMethod.instructions || 'Contact admin for payment details.'}
               </p>
@@ -151,7 +151,7 @@ export default function ActivatePage() {
                 value={reference}
                 onChange={(e) => setReference(e.target.value)}
                 placeholder="ID / TXREF"
-                className="w-full h-12 bg-black border border-white/5 rounded-md px-4 text-xs font-mono text-white outline-none focus:border-[var(--accent)] transition-all"
+                className="w-full h-12 bg-black border border-white/5 rounded-md px-4 text-xs font-mono text-white outline-none focus:border-(--accent) transition-all"
               />
             </div>
 
@@ -184,7 +184,7 @@ export default function ActivatePage() {
           <button 
             onClick={handleActivation}
             disabled={submitting}
-            className="w-full h-14 rounded-md bg-[var(--accent)] text-[#06060a] font-black text-xs uppercase tracking-[0.2em] hover:scale-[1.01] active:scale-98 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+            className="w-full h-14 rounded-md bg-(--accent) text-[#06060a] font-black text-xs uppercase tracking-[0.2em] hover:scale-[1.01] active:scale-98 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
           >
             {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send size={16} />}
             {submitting ? 'Transmitting...' : 'Submit Protocol Proof'}

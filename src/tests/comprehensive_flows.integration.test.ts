@@ -6,9 +6,9 @@ const { prismaMock } = vi.hoisted(() => ({
     user: { findUnique: vi.fn(), update: vi.fn() },
     protocolTransaction: { create: vi.fn(), findUnique: vi.fn(), update: vi.fn() },
     quiz: { findUnique: vi.fn() },
-    quizAttempt: { findFirst: vi.fn(), create: vi.fn() },
+    quizAttempt: { findFirst: vi.fn(), create: vi.fn(), count: vi.fn() },
     video: { findUnique: vi.fn() },
-    videoWatch: { findFirst: vi.fn(), create: vi.fn() },
+    videoWatch: { findFirst: vi.fn(), create: vi.fn(), count: vi.fn() },
     supportTicket: { create: vi.fn(), findUnique: vi.fn(), update: vi.fn(), findMany: vi.fn() },
     supportMessage: { create: vi.fn() },
     notification: { create: vi.fn() },
@@ -22,11 +22,12 @@ vi.mock('@/lib/prisma', () => ({
 
 import prisma from '@/lib/prisma'
 
-// ── Mock NextAuth ───────────────────────────────────────────────────────────
-vi.mock('next-auth', () => ({
-  getServerSession: vi.fn(),
+const { mockGetServerSession } = vi.hoisted(() => ({
+  mockGetServerSession: vi.fn()
 }))
-import { getServerSession } from 'next-auth'
+vi.mock('next-auth', () => ({ getServerSession: mockGetServerSession }))
+vi.mock('next-auth/next', () => ({ getServerSession: mockGetServerSession }))
+import { getServerSession } from 'next-auth/next'
 
 vi.mock('@/app/api/auth/[...nextauth]/route', () => ({ authOptions: {} }))
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }))

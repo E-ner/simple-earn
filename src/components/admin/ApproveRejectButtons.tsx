@@ -41,7 +41,7 @@ export function ApproveRejectButtons({ txId }: { txId: string }) {
     })
   }
 
-  if (isPending) return <Loader2 className="w-4 h-4 animate-spin text-[var(--accent)]" />
+  if (isPending) return <Loader2 className="w-4 h-4 animate-spin text-(--accent)" />
 
   return (
     <div className="flex flex-col gap-2">
@@ -49,7 +49,7 @@ export function ApproveRejectButtons({ txId }: { txId: string }) {
         {!showReject && (
           <button
             onClick={handleApprove}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-[var(--accent)]/10 border border-[var(--accent)]/20 text-[var(--accent)] text-[10px] font-black uppercase tracking-wider hover:bg-[var(--accent)]/20 transition-all hover:scale-105 active:scale-95"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-md bg-(--accent)/10 border border-(--accent)/20 text-(--accent) text-[10px] font-black uppercase tracking-wider hover:bg-(--accent)/20 transition-all hover:scale-105 active:scale-95"
           >
             <Check className="w-3.5 h-3.5" /> Approve
           </button>
@@ -58,8 +58,8 @@ export function ApproveRejectButtons({ txId }: { txId: string }) {
           onClick={handleReject}
           className={`flex items-center gap-1 px-3 py-1.5 rounded-md text-[10px] font-black uppercase tracking-wider transition-all hover:scale-105 active:scale-95 ${
             showReject 
-              ? 'bg-[var(--error)] text-white' 
-              : 'bg-[var(--error)]/10 border border-[var(--error)]/20 text-[var(--error)] hover:bg-[var(--error)]/20'
+              ? 'bg-(--error) text-white' 
+              : 'bg-(--error)/10 border border-(--error)/20 text-(--error) hover:bg-(--error)/20'
           }`}
         >
           {showReject ? <Send className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
@@ -68,7 +68,7 @@ export function ApproveRejectButtons({ txId }: { txId: string }) {
         {showReject && (
           <button 
             onClick={() => setShowReject(false)}
-            className="p-1.5 rounded-md hover:bg-[var(--surface-3)] text-[var(--text-tertiary)] transition-colors"
+            className="p-1.5 rounded-md hover:bg-(--surface-3) text-(--text-tertiary) transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -86,7 +86,7 @@ export function ApproveRejectButtons({ txId }: { txId: string }) {
             onChange={e => setRejectReason(e.target.value)}
             placeholder="Audit Failure Reason..."
             autoFocus
-            className="w-full text-[10px] px-3 py-2 rounded-md bg-[var(--surface-2)] border border-[var(--error)]/30 text-[var(--text-primary)] focus:outline-none focus:border-[var(--error)] placeholder:text-[#444] font-bold"
+            className="w-full text-[10px] px-3 py-2 rounded-md bg-(--surface-2) border border-(--error)/30 text-(--text-primary) focus:outline-none focus:border-(--error) placeholder:text-[#444] font-bold"
           />
         </motion.div>
       )}

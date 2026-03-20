@@ -63,7 +63,7 @@ export default function GamesPage() {
   if (loading) {
     return (
       <div className="h-96 flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-[var(--accent)] border-t-transparent animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-(--accent) border-t-transparent animate-spin" />
       </div>
     )
   }
@@ -79,10 +79,10 @@ export default function GamesPage() {
   return (
     <div className="flex flex-col gap-10 pb-20">
       <header className="mb-2 space-y-2">
-        <h1 className="text-3xl font-bold text-[var(--text-primary)] tracking-tight">
+        <h1 className="text-3xl font-bold text-(--text-primary) tracking-tight">
           {dict?.games?.title || 'Token Strategy Games'}
         </h1>
-        <p className="text-[var(--text-tertiary)] max-w-2xl leading-relaxed">
+        <p className="text-(--text-tertiary) max-w-2xl leading-relaxed">
           {dict?.games?.desc || 'Participate in decentralized probability games to multiply your verified tokens. (Animations Disabled)'}
         </p>
       </header>
@@ -97,19 +97,19 @@ export default function GamesPage() {
                 onClick={() => setSelectedTier(tier.id)}
                 className={`p-6 rounded-md border h-full transition-all text-left relative overflow-hidden cursor-pointer group ${
                   selectedTier === tier.id 
-                    ? 'bg-[var(--accent)]/10 border-[var(--accent)]' 
-                    : 'bg-[var(--surface-2)] border-[var(--border)] hover:bg-[var(--surface)] hover:border-[var(--border-hover)]'
+                    ? 'bg-(--accent)/10 border-(--accent)' 
+                    : 'bg-(--surface-2) border-(--border) hover:bg-(--surface) hover:border-(--border-hover)'
                 }`}
               >
                 <div className="relative z-10">
-                  <h3 className="text-lg font-bold text-[var(--text-primary)] mb-1">{tier.name}</h3>
+                  <h3 className="text-lg font-bold text-(--text-primary) mb-1">{tier.name}</h3>
                   <div className="space-y-1">
-                    <p className="text-[10px] text-[var(--text-tertiary)] uppercase font-bold tracking-widest">{dict?.games?.cost || 'Entry'}</p>
-                    <p className="text-xl font-bold text-[var(--text-primary)]">{formatCurrency(tier.cost, currency)}</p>
+                    <p className="text-[10px] text-(--text-tertiary) uppercase font-bold tracking-widest">{dict?.games?.cost || 'Entry'}</p>
+                    <p className="text-xl font-bold text-(--text-primary)">{formatCurrency(tier.cost, currency)}</p>
                   </div>
-                  <div className="mt-4 pt-4 border-t border-[var(--border)]">
-                    <p className="text-[10px] text-[var(--text-tertiary)] uppercase font-bold tracking-widest">{dict?.games?.winnings || 'Yield'}</p>
-                    <p className="text-sm font-bold text-[var(--accent)]">{formatCurrency(tier.win, currency)}</p>
+                  <div className="mt-4 pt-4 border-t border-(--border)">
+                    <p className="text-[10px] text-(--text-tertiary) uppercase font-bold tracking-widest">{dict?.games?.winnings || 'Yield'}</p>
+                    <p className="text-sm font-bold text-(--accent)">{formatCurrency(tier.win, currency)}</p>
                   </div>
                 </div>
               </div>
@@ -117,10 +117,10 @@ export default function GamesPage() {
           </div>
 
           {selectedTier && (
-            <div className="p-8 rounded-md bg-[var(--surface-2)] border border-[var(--border)] space-y-8 animate-in fade-in zoom-in duration-200">
+            <div className="p-8 rounded-md bg-(--surface-2) border border-(--border) space-y-8 animate-in fade-in zoom-in duration-200">
               <div className="text-center space-y-2">
-                <h3 className="text-xl font-bold text-[var(--text-primary)]">{dict?.games?.select_token || 'Identify Winning Node'}</h3>
-                <p className="text-sm text-[var(--text-tertiary)]">Select one of the five cryptographic nodes to match the network target.</p>
+                <h3 className="text-xl font-bold text-(--text-primary)">{dict?.games?.select_token || 'Identify Winning Node'}</h3>
+                <p className="text-sm text-(--text-tertiary)">Select one of the five cryptographic nodes to match the network target.</p>
               </div>
 
               <div className="grid grid-cols-5 gap-3 max-w-md mx-auto">
@@ -130,8 +130,8 @@ export default function GamesPage() {
                     onClick={() => setSelectedToken(token)}
                     className={`aspect-square rounded-md flex items-center justify-center text-2xl font-black transition-all border-2 ${
                       selectedToken === token
-                        ? 'bg-[var(--accent)]/10 border-[var(--accent)] text-[var(--accent)]'
-                        : 'bg-[var(--surface-3)] border-[var(--border)] text-[var(--text-tertiary)] hover:border-[var(--accent)]'
+                        ? 'bg-(--accent)/10 border-(--accent) text-(--accent)'
+                        : 'bg-(--surface-3) border-(--border) text-(--text-tertiary) hover:border-(--accent)'
                     }`}
                   >
                     {token}
@@ -145,8 +145,8 @@ export default function GamesPage() {
                   onClick={handlePlay}
                   className={`h-12 px-12 rounded-md font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-3 ${
                     playing 
-                      ? 'bg-[var(--surface-3)] text-[var(--text-tertiary)] cursor-not-allowed'
-                      : 'bg-[var(--accent)] text-white hover:opacity-90 shadow-lg shadow-[var(--accent)]/20'
+                      ? 'bg-(--surface-3) text-(--text-tertiary) cursor-not-allowed'
+                      : 'bg-(--accent) text-white hover:opacity-90 shadow-lg shadow-(--accent)/20'
                   }`}
                 >
                   {playing ? (
@@ -167,32 +167,32 @@ export default function GamesPage() {
                 <div
                   className={`p-6 rounded-md text-center space-y-2 border animate-in slide-in-from-bottom-4 duration-300 ${
                     gameResult.didWin 
-                      ? 'bg-[var(--success)]/10 border-[var(--success)]/20' 
-                      : 'bg-[var(--error)]/10 border-[var(--error)]/20'
+                      ? 'bg-(--success)/10 border-(--success)/20' 
+                      : 'bg-(--error)/10 border-(--error)/20'
                   }`}
                 >
                   {gameResult.didWin ? (
                     <>
-                      <div className="w-12 h-12 rounded-full bg-[var(--success)]/20 flex items-center justify-center mx-auto mb-2">
-                        <Trophy className="w-6 h-6 text-[var(--success)]" />
+                      <div className="w-12 h-12 rounded-full bg-(--success)/20 flex items-center justify-center mx-auto mb-2">
+                        <Trophy className="w-6 h-6 text-(--success)" />
                       </div>
-                      <h4 className="text-[var(--success)] font-bold">{dict?.games?.win_msg || 'Success!'}</h4>
-                      <p className="text-[var(--text-primary)] font-bold text-2xl">+{formatCurrency(gameResult.winnings, currency)}</p>
+                      <h4 className="text-(--success) font-bold">{dict?.games?.win_msg || 'Success!'}</h4>
+                      <p className="text-(--text-primary) font-bold text-2xl">+{formatCurrency(gameResult.winnings, currency)}</p>
                     </>
                   ) : (
                     <>
-                      <div className="w-12 h-12 rounded-full bg-[var(--error)]/20 flex items-center justify-center mx-auto mb-2">
-                        <AlertCircle className="w-6 h-6 text-[var(--error)]" />
+                      <div className="w-12 h-12 rounded-full bg-(--error)/20 flex items-center justify-center mx-auto mb-2">
+                        <AlertCircle className="w-6 h-6 text-(--error)" />
                       </div>
-                      <h4 className="text-[var(--error)] font-bold">{dict?.games?.loss_msg || 'Mismatch'}</h4>
-                      <p className="text-[var(--text-tertiary)] text-sm">Target was Token {gameResult.winToken}</p>
+                      <h4 className="text-(--error) font-bold">{dict?.games?.loss_msg || 'Mismatch'}</h4>
+                      <p className="text-(--text-tertiary) text-sm">Target was Token {gameResult.winToken}</p>
                     </>
                   )}
                 </div>
               )}
 
               {error && (
-                <div className="p-4 rounded-xl bg-[var(--error)]/10 border border-[var(--error)]/20 text-[var(--error)] text-sm text-center">
+                <div className="p-4 rounded-xl bg-(--error)/10 border border-(--error)/20 text-(--error) text-sm text-center">
                   {error}
                 </div>
               )}
@@ -202,21 +202,21 @@ export default function GamesPage() {
 
         {/* Right: Stats */}
         <div className="space-y-6">
-          <div className="p-8 rounded-md bg-[var(--surface-2)] border border-[var(--border)]">
-            <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-widest mb-6 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[var(--accent)]" />
+          <div className="p-8 rounded-md bg-(--surface-2) border border-(--border)">
+            <h3 className="text-sm font-bold text-(--text-primary) uppercase tracking-widest mb-6 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-(--accent)" />
               History
             </h3>
             
             <div className="space-y-4">
               {stats?.recentPlays?.map((play: any) => (
-                <div key={play.id} className="flex items-center justify-between p-3 rounded-md bg-[var(--surface-3)] border border-[var(--border)]">
+                <div key={play.id} className="flex items-center justify-between p-3 rounded-md bg-(--surface-3) border border-(--border)">
                   <div>
-                    <p className="text-xs font-bold text-[var(--text-primary)] uppercase tracking-tighter">{play.gameType}</p>
-                    <p className="text-[10px] text-[var(--text-tertiary)]">Picked {play.tokenPicked}</p>
+                    <p className="text-xs font-bold text-(--text-primary) uppercase tracking-tighter">{play.gameType}</p>
+                    <p className="text-[10px] text-(--text-tertiary)">Picked {play.tokenPicked}</p>
                   </div>
                   <div className="text-right">
-                    <p className={`text-xs font-bold ${play.didWin ? 'text-[var(--success)]' : 'text-[var(--text-tertiary)]'}`}>
+                    <p className={`text-xs font-bold ${play.didWin ? 'text-(--success)' : 'text-(--text-tertiary)'}`}>
                       {play.didWin ? `+${formatCurrency(Number(play.winnings), currency)}` : `-${formatCurrency(Number(play.amount), currency)}`}
                     </p>
                   </div>

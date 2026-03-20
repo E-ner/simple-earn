@@ -11,11 +11,11 @@ export default async function GamesPage({ params }: { params: Promise<{ lang: st
     <div className="p-8 max-w-3xl mx-auto">
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-1">
-          <Gamepad2 className="w-5 h-5 text-[var(--purple)]" />
-          <span className="text-[10px] font-black text-[var(--purple)] uppercase tracking-widest">Game Configuration</span>
+          <Gamepad2 className="w-5 h-5 text-(--purple)" />
+          <span className="text-[10px] font-black text-(--purple) uppercase tracking-widest">Game Configuration</span>
         </div>
-        <h1 className="text-2xl font-black text-[var(--text-primary)] tracking-tighter">Token Game Settings</h1>
-        <p className="text-sm text-[var(--text-tertiary)] mt-1">Configure win tokens and daily play limits for each game tier.</p>
+        <h1 className="text-2xl font-black text-(--text-primary) tracking-tighter">Token Game Settings</h1>
+        <p className="text-sm text-(--text-tertiary) mt-1">Configure win tokens and daily play limits for each game tier.</p>
       </div>
       <GameConfigClient initialConfig={config} />
     </div>

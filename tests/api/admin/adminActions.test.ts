@@ -88,8 +88,13 @@ describe('getAdminStats', () => {
     ;(prisma.user.count as any)
       .mockResolvedValueOnce(120)   // totalUsers
       .mockResolvedValueOnce(80)    // activeUsers
+    ;(prisma.user.findMany as any).mockResolvedValue([])
     ;(prisma.protocolTransaction.count as any).mockResolvedValue(5)
-    ;(prisma.protocolTransaction.aggregate as any).mockResolvedValue({ _sum: { amount: 250 } })
+    ;(prisma.protocolTransaction.findMany as any).mockResolvedValue([])
+    ;(prisma.protocolTransaction.aggregate as any)
+      .mockResolvedValueOnce({ _sum: { amount: 250 } })
+      .mockResolvedValueOnce({ _sum: { amount: 500 } })
+      .mockResolvedValueOnce({ _sum: { amount: 250 } })
     ;(prisma.supportTicket.count as any).mockResolvedValue(3)
 
     const stats = await getAdminStats()
@@ -103,7 +108,9 @@ describe('getAdminStats', () => {
 
   it('should handle zero values gracefully', async () => {
     ;(prisma.user.count as any).mockResolvedValue(0)
+    ;(prisma.user.findMany as any).mockResolvedValue([])
     ;(prisma.protocolTransaction.count as any).mockResolvedValue(0)
+    ;(prisma.protocolTransaction.findMany as any).mockResolvedValue([])
     ;(prisma.protocolTransaction.aggregate as any).mockResolvedValue({ _sum: { amount: null } })
     ;(prisma.supportTicket.count as any).mockResolvedValue(0)
 
@@ -117,12 +124,12 @@ describe('getAllUsers', () => {
   beforeEach(() => { vi.clearAllMocks(); mockAdmin() })
 
   it('should return paginated users with total count', async () => {
-    const mockUsers = [{ id: 'u1', username: 'alice', email: 'alice@test.com' }]
+    const mockUsers = [{ id: 'u1', username: 'alice', email: 'alice@test.com', mainBalance: { toNumber: () => 0, valueOf: () => 0 }, gameBalance: { toNumber: () => 0, valueOf: () => 0 } }]
     ;(prisma.user.findMany as any).mockResolvedValue(mockUsers)
     ;(prisma.user.count as any).mockResolvedValue(1)
 
     const result = await getAllUsers(1)
-    expect(result.users).toEqual(mockUsers)
+    expect(result.users).toEqual([{ id: 'u1', username: 'alice', email: 'alice@test.com', mainBalance: 0, gameBalance: 0 }])
     expect(result.total).toBe(1)
     expect(result.pages).toBe(1)
   })
@@ -236,17 +243,17 @@ describe('Content Scheduling', () => {
   beforeEach(() => { vi.clearAllMocks(); mockAdmin() })
 
   it('getAllQuizzes should return all quizzes', async () => {
-    const mockQuizzes = [{ id: 'q1', title: 'Quiz 1', isActive: true }]
+    const mockQuizzes = [{ id: 'q1', title: 'Quiz 1', isActive: true, reward: { toNumber: () => 5, valueOf: () => 5 } }]
     ;(prisma.quiz.findMany as any).mockResolvedValue(mockQuizzes)
     const result = await getAllQuizzes()
-    expect(result).toEqual(mockQuizzes)
+    expect(result).toEqual([{ id: 'q1', title: 'Quiz 1', isActive: true, reward: 5 }])
   })
 
   it('getAllVideos should return all videos', async () => {
-    const mockVideos = [{ id: 'v1', title: 'Video 1', isActive: true }]
+    const mockVideos = [{ id: 'v1', title: 'Video 1', isActive: true, reward: { toNumber: () => 5, valueOf: () => 5 } }]
     ;(prisma.video.findMany as any).mockResolvedValue(mockVideos)
     const result = await getAllVideos()
-    expect(result).toEqual(mockVideos)
+    expect(result).toEqual([{ id: 'v1', title: 'Video 1', isActive: true, reward: 5 }])
   })
 
   it('setDailySchedule should upsert with correct quizIds and videoIds', async () => {

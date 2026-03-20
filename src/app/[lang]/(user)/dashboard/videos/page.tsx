@@ -88,15 +88,15 @@ export default function VideosPage() {
     <div className="pb-20">
       <header className="mb-8 space-y-2">
         <div className="flex items-center justify-between flex-wrap gap-4">
-          <h1 className="text-2xl font-bold text-white tracking-tight">{dict?.videos?.title || 'Earning Catalog'}</h1>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-white/5 border border-white/10">
-            <Video className="w-3.5 h-3.5 text-[var(--accent)]" />
-            <span className="text-[10px] font-black text-[#888] uppercase tracking-widest">
+          <h1 className="text-2xl font-bold text-(--text-primary) tracking-tight">{dict?.videos?.title || 'Earning Catalog'}</h1>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-(--surface-2) border border-(--border)">
+            <Video className="w-3.5 h-3.5 text-(--accent)" />
+            <span className="text-[10px] font-black text-(--text-secondary) uppercase tracking-widest">
               {dailyStatus.watched}/{dailyStatus.limit} Today
             </span>
           </div>
         </div>
-        <p className="text-[#888] text-sm max-w-2xl">
+        <p className="text-(--text-secondary) text-sm max-w-2xl">
           {dict?.videos?.desc || 'Watch curated training modules to earn digital assets. Maximum 2 videos per day.'}
         </p>
       </header>
@@ -104,7 +104,7 @@ export default function VideosPage() {
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1,2,3].map(i => (
-            <div key={i} className="h-64 rounded-md bg-white/[0.02] border border-white/[0.06] animate-pulse" />
+            <div key={i} className="h-64 rounded-md bg-(--surface-2) border border-(--border) animate-pulse" />
           ))}
         </div>
       ) : (
@@ -114,7 +114,7 @@ export default function VideosPage() {
               key={video.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`group p-4 rounded-md bg-[#16161e] border border-white/[0.06] hover:border-[var(--accent)]/30 transition-all ${video.isWatched ? 'opacity-70' : ''}`}
+              className={`group p-4 rounded-md bg-(--surface) border border-(--border) hover:border-(--accent)/30 transition-all ${video.isWatched ? 'opacity-70' : ''}`}
             >
               <div className="relative aspect-video rounded-sm overflow-hidden mb-4 bg-black">
                 {video.thumbnailUrl ? (
@@ -125,8 +125,8 @@ export default function VideosPage() {
                     className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1a1a2e] to-[#0f0f1a]">
-                    <Video className="w-12 h-12 text-white/10" />
+                  <div className="w-full h-full flex items-center justify-center bg-(--surface-2)">
+                    <Video className="w-12 h-12 text-(--text-tertiary)" />
                   </div>
                 )}
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -141,13 +141,13 @@ export default function VideosPage() {
 
               <div className="space-y-3">
                 {video.isNewUserVideo && (
-                  <div className="inline-block px-2 py-0.5 rounded-sm bg-[var(--purple)]/20 border border-[var(--purple)]/30 text-[9px] font-black text-[var(--purple)] uppercase tracking-widest mb-1">
+                  <div className="inline-block px-2 py-0.5 rounded-sm bg-(--purple)/20 border border-(--purple)/30 text-[9px] font-black text-(--purple) uppercase tracking-widest mb-1">
                     Onboarding Module
                   </div>
                 )}
                 <div className="flex justify-between items-start gap-2">
-                  <h3 className="font-bold text-white text-sm leading-snug">{video.title}</h3>
-                  <div className="flex items-center gap-1 px-2 py-0.5 rounded-sm bg-[var(--accent)]/10 border border-[var(--accent)]/20 text-[10px] font-black text-[var(--accent)]">
+                  <h3 className="font-bold text-(--text-primary) text-sm leading-snug">{video.title}</h3>
+                  <div className="flex items-center gap-1 px-2 py-0.5 rounded-sm bg-(--accent)/10 border border-(--accent)/20 text-[10px] font-black text-(--accent)">
                     + {formatCurrency(video.reward)}
                   </div>
                 </div>
@@ -156,7 +156,7 @@ export default function VideosPage() {
                 </p>
                 <div className="pt-4 flex items-center justify-between">
                   {video.isWatched ? (
-                    <div className="flex items-center gap-2 text-[10px] font-bold text-[var(--accent)]">
+                    <div className="flex items-center gap-2 text-[10px] font-bold text-(--accent)">
                       <CheckCircle2 className="w-3.5 h-3.5" /> {dict?.videos?.completed || 'COMPLETED'}
                     </div>
                   ) : (
@@ -202,7 +202,7 @@ export default function VideosPage() {
               </div>
 
               {/* Controls panel */}
-              <div className="bg-[#16161e] border border-white/[0.08] p-6 rounded-lg space-y-4 w-full">
+              <div className="bg-[#16161e] border border-white/8 p-6 rounded-lg space-y-4 w-full">
                 <div className="text-center space-y-1">
                   <h2 className="text-lg font-black text-white tracking-tight">{watchingVideo.title}</h2>
                   <p className="text-[#888] text-[10px] font-bold uppercase tracking-widest">
@@ -212,7 +212,7 @@ export default function VideosPage() {
 
                 {watchingVideo.hasVerificationCode && (
                   <div className="space-y-2">
-                    <label className="block text-[10px] font-black text-[var(--accent)] uppercase tracking-widest text-center">
+                    <label className="block text-[10px] font-black text-(--accent) uppercase tracking-widest text-center">
                       Enter Verification Code
                     </label>
                     <input 
@@ -220,7 +220,7 @@ export default function VideosPage() {
                       placeholder="Enter the code shown in the video"
                       value={verificationCode}
                       onChange={(e) => setVerificationCode(e.target.value)}
-                      className="w-full bg-black/40 border border-white/10 rounded-md px-4 py-2.5 text-center text-white font-mono tracking-widest text-sm focus:border-[var(--accent)] outline-none transition-all"
+                      className="w-full bg-black/40 border border-white/10 rounded-md px-4 py-2.5 text-center text-white font-mono tracking-widest text-sm focus:border-(--accent) outline-none transition-all"
                     />
                   </div>
                 )}
@@ -235,7 +235,7 @@ export default function VideosPage() {
                   <button 
                     disabled={!canComplete || (watchingVideo.hasVerificationCode && !verificationCode) || dailyStatus.watched >= dailyStatus.limit}
                     onClick={handleComplete}
-                    className="px-6 py-2.5 rounded-md bg-[var(--accent)] text-black text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="px-6 py-2.5 rounded-md bg-(--accent) text-black text-[10px] font-black uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     {dailyStatus.watched >= dailyStatus.limit
                       ? 'Daily Limit Reached'

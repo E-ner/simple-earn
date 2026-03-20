@@ -165,7 +165,7 @@ export default function WalletPage() {
 
   if (loading) return (
     <div className="h-96 flex items-center justify-center">
-      <Loader2 className="w-8 h-8 text-[var(--accent)] animate-spin" />
+      <Loader2 className="w-8 h-8 text-(--accent) animate-spin" />
     </div>
   )
 
@@ -174,8 +174,8 @@ export default function WalletPage() {
   return (
     <div className="pb-20">
       <header className="mb-10 space-y-2">
-        <h1 className="text-3xl font-bold text-white tracking-tight">{dict?.wallet?.title || 'Financial Hub'}</h1>
-        <p className="text-[#888] max-w-2xl">
+        <h1 className="text-3xl font-bold text-(--text-primary) tracking-tight">{dict?.wallet?.title || 'Financial Hub'}</h1>
+        <p className="text-(--text-secondary) max-w-2xl">
           {dict?.wallet?.desc || 'Manage your verified assets.'}
         </p>
       </header>
@@ -192,14 +192,14 @@ export default function WalletPage() {
               <Sparkles className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-white uppercase tracking-widest">{dict?.wallet?.activate_title || 'Account Activation Required'}</h3>
-              <p className="text-xs text-[#888] max-w-md">{dict?.wallet?.activate_desc || 'Initialize your account for a one-time protocol fee of $1.00.'}</p>
+              <h3 className="text-sm font-bold text-(--text-primary) uppercase tracking-widest">{dict?.wallet?.activate_title || 'Account Activation Required'}</h3>
+              <p className="text-xs text-(--text-secondary) max-w-md">{dict?.wallet?.activate_desc || 'Initialize your account for a one-time protocol fee of $1.00.'}</p>
             </div>
           </div>
           <button 
             onClick={handleActivation}
             disabled={submitting}
-            className="h-11 px-8 bg-orange-500 text-white text-[10px] font-black rounded-xl uppercase tracking-[0.2em] hover:bg-orange-600 transition-all flex items-center gap-2"
+            className="h-11 px-8 bg-orange-500 text-(--text-inverse) text-[10px] font-black rounded-xl uppercase tracking-[0.2em] hover:bg-orange-600 transition-all flex items-center gap-2"
           >
             {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
             {dict?.wallet?.activate_btn || 'Initialize Node Now'}
@@ -209,69 +209,69 @@ export default function WalletPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
         <div className="lg:col-span-1 space-y-4">
-          <div className="p-8 rounded-md bg-gradient-to-br from-[var(--accent)]/10 to-[#0d0d14] border border-[var(--accent)]/10 relative overflow-hidden">
-             <div className="absolute inset-0 bg-[var(--accent)] opacity-[0.03] blur-3xl rounded-full -mr-20 -mt-20 group-hover:scale-110 transition-transform" />
+          <div className="p-8 rounded-md bg-gradient-to-br from-(--accent)/10 to-(--surface-2) border border-(--accent)/10 relative overflow-hidden">
+             <div className="absolute inset-0 bg-(--accent) opacity-[0.03] blur-3xl rounded-full -mr-20 -mt-20 group-hover:scale-110 transition-transform" />
              <div className="relative z-10 text-center">
-                <div className="text-[10px] font-black text-[var(--accent)] uppercase tracking-widest mb-4">
+                <div className="text-[10px] font-black text-(--accent) uppercase tracking-widest mb-4">
                   {dict?.wallet?.current_assets || 'Current Assets'}
                 </div>
-                <div className="text-5xl font-bold text-white tracking-tighter mb-2">
+                <div className="text-5xl font-bold text-(--text-primary) tracking-tighter mb-2">
                   {formatCurrency(data?.balances?.total, currency)}
                 </div>
-                <p className="text-xs text-[#888]">Verified Principal</p>
-                <div className="mt-8 grid grid-cols-2 gap-4 border-t border-white/5 pt-8">
+                <p className="text-xs text-(--text-secondary)">Verified Principal</p>
+                <div className="mt-8 grid grid-cols-2 gap-4 border-t border-(--border) pt-8">
                   <div>
-                    <div className="text-[10px] font-bold text-[#555] uppercase tracking-widest">
+                    <div className="text-[10px] font-bold text-(--text-tertiary) uppercase tracking-widest">
                       {dict?.dashboard?.balances?.main || 'Main'}
                     </div>
-                    <div className="text-lg font-bold text-white">{formatCurrency(data?.balances?.main, currency)}</div>
+                    <div className="text-lg font-bold text-(--text-primary)">{formatCurrency(data?.balances?.main, currency)}</div>
                   </div>
                   <div>
                     <div className="text-[10px] font-bold text-[#555] uppercase tracking-widest">
                       {dict?.dashboard?.balances?.game || 'Game'}
                     </div>
-                    <div className="text-lg font-bold text-[var(--purple)]">{formatCurrency(data?.balances?.game, currency)}</div>
+                    <div className="text-lg font-bold text-(--purple)">{formatCurrency(data?.balances?.game, currency)}</div>
                   </div>
                 </div>
              </div>
           </div>
 
-          <div className="p-6 rounded-md bg-[#16161e] border border-white/[0.06] flex items-center gap-4">
-             <div className={`w-10 h-10 rounded-md flex items-center justify-center text-sm ${data?.user?.isActivated ? 'bg-green-500/10 text-green-500' : 'bg-orange-500/10 text-orange-500'}`}>
-                {data?.user?.isActivated ? <ShieldCheck /> : <History />}
+          <div className="p-6 rounded-md bg-(--surface-2) border border-(--border) flex items-center gap-4">
+             <div className={`w-10 h-10 rounded-md flex items-center justify-center text-sm ${data?.user?.isActivated ? 'bg-(--success)/10 text-(--success)' : 'bg-orange-500/10 text-orange-500'}`}>
+                {data?.user?.isActivated ? <ShieldCheck className="w-5 h-5" /> : <History className="w-5 h-5" />}
              </div>
              <div>
-                <p className="text-xs font-bold text-white">
+                <p className="text-xs font-bold text-(--text-primary)">
                   {data?.user?.isActivated ? 'Protocol Verified' : 'Initialization Pending'}
                 </p>
-                <p className="text-[10px] text-[#555] uppercase">{data?.country} Node</p>
+                <p className="text-[10px] text-(--text-tertiary) uppercase">{data?.country} Node</p>
              </div>
           </div>
         </div>
 
         <div className="lg:col-span-2 card p-1 flex flex-col min-h-[500px]">
-          <div className="flex border-b border-white/[0.05] overflow-x-auto">
+          <div className="flex border-b border-(--border) overflow-x-auto">
              <button 
                 onClick={() => setActiveTab('history')}
-                className={`flex-1 min-w-[100px] py-4 text-[10px] font-bold tracking-widest uppercase transition-colors ${activeTab === 'history' ? 'text-white border-b-2 border-[var(--accent)]' : 'text-[#555] hover:text-[#888]'}`}
+                className={`flex-1 min-w-[100px] py-4 text-[10px] font-bold tracking-widest uppercase transition-colors ${activeTab === 'history' ? 'text-(--text-primary) border-b-2 border-(--accent)' : 'text-(--text-tertiary) hover:text-(--text-secondary)'}`}
              >
                 {dict?.wallet?.history || 'Audit Log'}
              </button>
              <button 
                 onClick={() => setActiveTab('deposit')}
-                className={`flex-1 min-w-[100px] py-4 text-[10px] font-bold tracking-widest uppercase transition-colors ${activeTab === 'deposit' ? 'text-white border-b-2 border-[var(--accent)]' : 'text-[#555] hover:text-[#888]'}`}
+                className={`flex-1 min-w-[100px] py-4 text-[10px] font-bold tracking-widest uppercase transition-colors ${activeTab === 'deposit' ? 'text-(--text-primary) border-b-2 border-(--accent)' : 'text-(--text-tertiary) hover:text-(--text-secondary)'}`}
              >
                 {dict?.wallet?.deposit_game || 'Deposit'}
              </button>
              <button 
                 onClick={() => setActiveTab('withdrawal')}
-                className={`flex-1 min-w-[100px] py-4 text-[10px] font-bold tracking-widest uppercase transition-colors ${activeTab === 'withdrawal' ? 'text-white border-b-2 border-[var(--accent)]' : 'text-[#555] hover:text-[#888]'}`}
+                className={`flex-1 min-w-[100px] py-4 text-[10px] font-bold tracking-widest uppercase transition-colors ${activeTab === 'withdrawal' ? 'text-(--text-primary) border-b-2 border-(--accent)' : 'text-(--text-tertiary) hover:text-(--text-secondary)'}`}
              >
                 {dict?.wallet?.withdraw || 'Capital Exit'}
              </button>
              <button 
                 onClick={() => setActiveTab('transfer')}
-                className={`flex-1 min-w-[100px] py-4 text-[10px] font-bold tracking-widest uppercase transition-colors ${activeTab === 'transfer' ? 'text-white border-b-2 border-[var(--accent)]' : 'text-[#555] hover:text-[#888]'}`}
+                className={`flex-1 min-w-[100px] py-4 text-[10px] font-bold tracking-widest uppercase transition-colors ${activeTab === 'transfer' ? 'text-(--text-primary) border-b-2 border-(--accent)' : 'text-(--text-tertiary) hover:text-(--text-secondary)'}`}
              >
                 {dict?.wallet?.transfer_to_game || 'Transfer'}
              </button>
@@ -282,14 +282,14 @@ export default function WalletPage() {
               {activeTab === 'history' && (
                 <motion.div key="history" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
                   {data?.transactions?.map((tx: any) => (
-                    <div key={tx.id} className="flex items-center justify-between p-4 rounded-2xl hover:bg-white/[0.02] transition-colors border border-transparent hover:border-white/[0.04]">
+                    <div key={tx.id} className="flex items-center justify-between p-4 rounded-2xl hover:bg-(--surface-3) transition-colors border border-transparent hover:border-(--border)">
                        <div className="flex items-center gap-4">
-                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${['EARNING', 'GAME_WIN', 'DEPOSIT'].includes(tx.type) ? 'bg-green-500/10 text-green-500' : tx.type === 'TRANSFER' ? 'bg-blue-500/10 text-blue-500' : 'bg-orange-500/10 text-orange-500'}`}>
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${['EARNING', 'GAME_WIN', 'DEPOSIT'].includes(tx.type) ? 'bg-(--success)/10 text-(--success)' : tx.type === 'TRANSFER' ? 'bg-blue-500/10 text-blue-500' : 'bg-orange-500/10 text-orange-500'}`}>
                              {tx.type === 'TRANSFER' ? <ArrowRightLeft size={16} /> : ['EARNING', 'GAME_WIN', 'DEPOSIT'].includes(tx.type) ? <ArrowDownLeft size={18} /> : <ArrowUpRight size={18} />}
                           </div>
                           <div>
-                             <p className="text-sm font-bold text-white">{tx.notes || tx.type.replace('_', ' ')}</p>
-                             <p className="text-[10px] text-[#555] font-mono">{new Date(tx.createdAt).toLocaleString()}</p>
+                             <p className="text-sm font-bold text-(--text-primary)">{tx.notes || tx.type.replace('_', ' ')}</p>
+                             <p className="text-[10px] text-(--text-secondary) font-mono">{new Date(tx.createdAt).toLocaleString()}</p>
                           </div>
                        </div>
                         <div className="text-right flex flex-col items-end gap-1">
@@ -300,7 +300,7 @@ export default function WalletPage() {
                              {tx.proofImage && (
                                <button 
                                  onClick={() => setSelectedProof(tx.proofImage)}
-                                 className="text-[9px] text-[var(--accent)] hover:underline uppercase font-bold tracking-tighter"
+                                 className="text-[9px] text-(--accent) hover:underline uppercase font-bold tracking-tighter"
                                >
                                  View Receipt
                                </button>
@@ -323,28 +323,28 @@ export default function WalletPage() {
                   
                   {/* Amount Input */}
                   <div className="space-y-2">
-                     <label className="text-[10px] font-black text-[#555] uppercase tracking-widest px-1">{dict?.wallet?.deposit_amount || 'Injection Amount (USD)'}</label>
+                     <label className="text-[10px] font-black text-(--text-secondary) uppercase tracking-widest px-1">{dict?.wallet?.deposit_amount || 'Injection Amount (USD)'}</label>
                      <input 
                        type="number" 
                        value={depositAmount}
                        onChange={(e) => setDepositAmount(e.target.value)}
                        placeholder="0.00" 
-                       className="w-full h-14 bg-black border border-white/5 rounded-md px-6 text-xl font-bold text-white focus:border-[var(--accent)] outline-none transition-all"
+                       className="w-full h-14 bg-(--surface-2) border border-(--border) rounded-md px-6 text-xl font-bold text-(--text-primary) focus:border-(--accent) outline-none transition-all"
                      />
                   </div>
 
                   {/* Payment Methods Grid */}
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-[#555] uppercase tracking-widest px-1">Select Channel</label>
+                    <label className="text-[10px] font-black text-(--text-secondary) uppercase tracking-widest px-1">Select Channel</label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {paymentMethods.map((m) => (
                         <button
                           key={m.id}
                           onClick={() => setSelectedMethod(m)}
-                          className={`p-4 rounded-md border text-left transition-all flex items-center justify-between ${selectedMethod?.id === m.id ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-white/5 bg-[#0d0d14]'}`}
+                          className={`p-4 rounded-md border text-left transition-all flex items-center justify-between ${selectedMethod?.id === m.id ? 'border-(--accent) bg-(--accent)/5' : 'border-(--border) bg-(--surface-2)'}`}
                         >
-                          <span className={`text-[10px] font-bold uppercase tracking-widest ${selectedMethod?.id === m.id ? 'text-white' : 'text-[#555]'}`}>{m.name}</span>
-                          {selectedMethod?.id === m.id && <Zap size={12} className="text-[var(--accent)]" />}
+                          <span className={`text-[10px] font-bold uppercase tracking-widest ${selectedMethod?.id === m.id ? 'text-(--text-primary)' : 'text-(--text-secondary)'}`}>{m.name}</span>
+                          {selectedMethod?.id === m.id && <Zap size={12} className="text-(--accent)" />}
                         </button>
                       ))}
                     </div>
@@ -352,9 +352,9 @@ export default function WalletPage() {
 
                   {/* Dynamic Instructions */}
                   {selectedMethod && (
-                    <div className="p-4 rounded-md bg-white/[0.02] border border-white/5">
-                      <h4 className="text-[10px] font-black text-[var(--accent)] uppercase tracking-widest mb-2">Instructions</h4>
-                      <p className="text-[11px] text-[#888] font-mono leading-tight whitespace-pre-line uppercase select-all">
+                    <div className="p-4 rounded-md bg-(--surface-3) border border-(--border)">
+                      <h4 className="text-[10px] font-black text-(--accent) uppercase tracking-widest mb-2">Instructions</h4>
+                      <p className="text-[11px] text-(--text-secondary) font-mono leading-tight whitespace-pre-line uppercase select-all">
                         {selectedMethod.instructions}
                       </p>
                     </div>
@@ -363,18 +363,18 @@ export default function WalletPage() {
                   {/* Reference & Proof */}
                   <div className="grid grid-cols-1 gap-4">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black text-[#555] uppercase tracking-widest px-1">{dict?.wallet?.pay_ref || 'Injection Reference'}</label>
+                      <label className="text-[10px] font-black text-(--text-secondary) uppercase tracking-widest px-1">{dict?.wallet?.pay_ref || 'Injection Reference'}</label>
                       <input 
                         type="text" 
                         value={depositRef}
                         onChange={(e) => setDepositRef(e.target.value)}
                         placeholder="Receipt ID / TX Hash" 
-                        className="w-full h-12 bg-black border border-white/5 rounded-md px-4 text-xs font-mono text-white outline-none focus:border-[var(--accent)] transition-all"
+                        className="w-full h-12 bg-(--surface-2) border border-(--border) rounded-md px-4 text-xs font-mono text-(--text-primary) outline-none focus:border-(--accent) transition-all"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black text-[#555] uppercase tracking-widest px-1">Payment Proof</label>
+                      <label className="text-[10px] font-black text-(--text-secondary) uppercase tracking-widest px-1">Payment Proof</label>
                       <div className="relative group">
                         <input 
                           type="file" 
@@ -382,16 +382,16 @@ export default function WalletPage() {
                           onChange={(e) => setProofImage(e.target.files?.[0] || null)}
                           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                         />
-                        <div className={`h-24 rounded-md border-2 border-dashed flex items-center justify-center gap-4 transition-all ${proofImage ? 'border-green-500/40 bg-green-500/5' : 'border-white/5 bg-black group-hover:border-white/10'}`}>
+                        <div className={`h-24 rounded-md border-2 border-dashed flex items-center justify-center gap-4 transition-all ${proofImage ? 'border-(--success)/40 bg-(--success)/5' : 'border-(--border) bg-(--surface-2) group-hover:border-(--accent)'}`}>
                            {proofImage ? (
                              <>
-                               <ShieldCheck className="text-green-500 w-5 h-5" />
-                               <span className="text-[10px] font-bold text-green-500 uppercase truncate max-w-[200px]">{proofImage.name}</span>
+                               <ShieldCheck className="text-(--success) w-5 h-5" />
+                               <span className="text-[10px] font-bold text-(--success) uppercase truncate max-w-[200px]">{proofImage.name}</span>
                              </>
                            ) : (
                              <>
-                               <Camera className="text-[#333] w-5 h-5" />
-                               <span className="text-[10px] font-black text-[#333] uppercase">Attach Screenshot</span>
+                               <Camera className="text-(--text-tertiary) w-5 h-5" />
+                               <span className="text-[10px] font-black text-(--text-tertiary) uppercase">Attach Screenshot</span>
                              </>
                            )}
                         </div>
@@ -399,7 +399,7 @@ export default function WalletPage() {
                           <motion.div 
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="mt-2 p-1 bg-white/5 border border-white/10 rounded-md overflow-hidden"
+                            className="mt-2 p-1 bg-(--surface-3) border border-(--border) rounded-md overflow-hidden"
                           >
                             <img src={proofPreview} alt="Proof Preview" className="w-full h-32 object-cover rounded" />
                           </motion.div>
@@ -411,7 +411,7 @@ export default function WalletPage() {
                   <button 
                     onClick={handleDeposit}
                     disabled={submitting || !depositAmount || !proofImage}
-                    className="w-full h-14 rounded-md bg-[var(--accent)] text-[#06060a] font-black text-xs uppercase tracking-[0.2em] hover:scale-[1.01] active:scale-98 transition-all disabled:opacity-50 flex items-center justify-center gap-3 shadow-xl shadow-[var(--accent)]/10"
+                    className="w-full h-14 rounded-md bg-(--accent) text-(--text-inverse) font-black text-xs uppercase tracking-[0.2em] hover:scale-[1.01] active:scale-98 transition-all disabled:opacity-50 flex items-center justify-center gap-3"
                   >
                      {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send size={16} />}
                      {submitting ? 'Transmitting...' : dict?.wallet?.deposit_btn || 'Initialize Injection'}
@@ -422,47 +422,35 @@ export default function WalletPage() {
               {activeTab === 'withdrawal' && (
                 <motion.div key="withdraw" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="max-w-md mx-auto space-y-6 pt-4">
                   <div className="space-y-2">
-                     <label className="text-[10px] font-black text-[#555] uppercase tracking-widest px-1">
-                       {dict?.wallet?.payout_channel || 'Select Payout Channel'}
-                     </label>
+                     <label className="text-[10px] font-black text-(--text-secondary) uppercase tracking-widest px-1">Withdrawal Channel</label>
                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {paymentMethods.map((m) => (
+                        {paymentMethods.filter(m => m.id === 'USDT_TRC20' || m.id === 'USDT_BEP20' || m.id === 'ERC20').map((m) => (
                           <button 
                             key={m.id}
                             onClick={() => setSelectedMethod(m)}
-                            className={`p-4 rounded-md border text-left transition-all flex items-center justify-between ${selectedMethod?.id === m.id ? 'border-[var(--accent)] bg-[var(--accent)]/5' : 'border-white/5 bg-[#0d0d14]'}`}
+                            className={`p-4 rounded-md border text-left transition-all flex items-center justify-between ${selectedMethod?.id === m.id ? 'border-(--accent) bg-(--accent)/5' : 'border-(--border) bg-(--surface-2)'}`}
                           >
-                             <span className={`text-[10px] font-bold uppercase tracking-widest ${selectedMethod?.id === m.id ? 'text-white' : 'text-[#555]'}`}>{m.name}</span>
-                             {selectedMethod?.id === m.id && <Zap size={12} className="text-[var(--accent)]" />}
+                             <span className={`text-[10px] font-bold uppercase tracking-widest ${selectedMethod?.id === m.id ? 'text-(--text-primary)' : 'text-(--text-secondary)'}`}>{m.name}</span>
+                             {selectedMethod?.id === m.id && <CheckCircle2 size={14} className="text-(--accent)" />}
                           </button>
                         ))}
                      </div>
                   </div>
                   <div className="space-y-2">
-                     <label className="text-[10px] font-black text-[#555] uppercase tracking-widest px-1">Amount (USD)</label>
-                     <input 
-                       type="number" 
-                       value={amount}
-                       onChange={(e) => setAmount(e.target.value)}
-                       placeholder="Min. $5.00" 
-                       className="w-full h-14 bg-black border border-white/5 rounded-md px-6 text-xl font-bold text-white focus:border-[var(--accent)] outline-none transition-all"
-                     />
-                  </div>
-                  <div className="space-y-2">
-                     <label className="text-[10px] font-black text-[#555] uppercase tracking-widest px-1">Destination Address / Account</label>
+                     <label className="text-[10px] font-black text-(--text-secondary) uppercase tracking-widest px-1">Destination Address</label>
                      <input 
                        type="text" 
                        value={withdrawalAddress}
                        onChange={(e) => setWithdrawalAddress(e.target.value)}
                        placeholder="e.g. Wallet Address, Email, or Phone" 
-                       className="w-full h-12 bg-black border border-white/5 rounded-md px-4 text-xs font-mono text-white outline-none focus:border-[var(--accent)] transition-all"
+                       className="w-full h-12 bg-black border border-white/5 rounded-md px-4 text-xs font-mono text-white outline-none focus:border-(--accent) transition-all"
                      />
                      <p className="text-[9px] text-center text-[#555] uppercase tracking-widest font-black">Estimated Local: {formatCurrency(Number(amount) || 0, currency)}</p>
                   </div>
                   <button 
                     onClick={handleWithdrawal}
                     disabled={submitting || !amount}
-                    className="w-full h-14 rounded-md bg-[var(--accent)] text-[#06060a] font-black text-xs uppercase tracking-[0.2em] hover:scale-[1.01] transition-all shadow-xl shadow-[var(--accent)]/10 disabled:opacity-50"
+                    className="w-full h-14 rounded-md bg-(--accent) text-[#06060a] font-black text-xs uppercase tracking-[0.2em] hover:scale-[1.01] transition-all shadow-xl shadow-(--accent)/10 disabled:opacity-50"
                   >
                      {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : <ArrowUpRight size={16} />}
                      {dict?.wallet?.submit || 'Submit Capital Exit'}
@@ -505,28 +493,26 @@ export default function WalletPage() {
       </div>
       {/* Lightbox Modal */}
       <AnimatePresence>
-        {selectedProof && (
+        {viewImage && (
           <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedProof(null)}
-            className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 backdrop-blur-sm"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-(--bg-base)/80 backdrop-blur-sm"
+            onClick={() => setViewImage(null)}
           >
             <motion.div 
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative max-w-5xl w-full max-h-[90vh] bg-[#0a0a0f] border border-white/10 rounded-2xl overflow-hidden shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
+              initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+              className="relative max-w-3xl w-full max-h-[90vh] bg-(--surface) border border-(--border) rounded-2xl overflow-hidden flex flex-col"
+              onClick={e => e.stopPropagation()}
             >
-               <button 
-                onClick={() => setSelectedProof(null)}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60 transition-colors z-10"
-               >
-                 <XCircle />
-               </button>
-               <img src={selectedProof} alt="Proof Full" className="w-full h-full object-contain" />
+              <div className="p-4 border-b border-(--border) flex justify-between items-center">
+                <h3 className="text-sm font-bold uppercase tracking-widest text-(--accent)">Verification Proof</h3>
+                <button onClick={() => setViewImage(null)} className="p-2 bg-(--surface-2) text-(--text-primary) hover:bg-(--surface-3) rounded-lg transition-colors">
+                  <X size={16} />
+                </button>
+              </div>
+              <div className="p-4 overflow-auto flex-1 flex justify-center items-center bg-(--surface-2)">
+                <img src={viewImage} alt="Payment Proof" className="max-w-full max-h-full object-contain rounded-md" />
+              </div>
             </motion.div>
           </motion.div>
         )}

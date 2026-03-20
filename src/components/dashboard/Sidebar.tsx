@@ -34,18 +34,18 @@ export default function Sidebar({ userRole, isMobile, onLinkClick }: { userRole?
   }
 
   return (
-    <aside className={`${isMobile ? 'w-full' : 'w-[220px] hidden md:flex'} shrink-0 bg-[var(--bg-overlay)] border-r border-[var(--border)] flex-col relative z-20 h-full`}>
+    <aside className={`${isMobile ? 'w-full' : 'w-[220px] hidden md:flex'} shrink-0 bg-(--bg-overlay) border-r border-(--border) flex-col relative z-20 h-full`}>
       <div className="p-6 flex items-center justify-between">
         <Link href={`/${lang}/dashboard` as any} onClick={onLinkClick} className="flex items-center gap-3 w-max">
-          <div className="w-8 h-8 rounded bg-[var(--accent)] flex items-center justify-center shrink-0">
-            <span className="text-[var(--text-inverse)] font-bold text-lg leading-none">S</span>
+          <div className="w-8 h-8 rounded bg-(--accent) flex items-center justify-center shrink-0">
+            <span className="text-(--text-inverse) font-bold text-lg leading-none">S</span>
           </div>
-          <span className="font-display font-bold text-lg tracking-tight text-[var(--text-primary)]">
+          <span className="font-display font-bold text-lg tracking-tight text-(--text-primary)">
             Simple Earn
           </span>
         </Link>
         {isMobile && (
-          <button onClick={onLinkClick} className="p-2 text-[var(--text-secondary)]">
+          <button onClick={onLinkClick} className="p-2 text-(--text-secondary)">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -76,10 +76,10 @@ export default function Sidebar({ userRole, isMobile, onLinkClick }: { userRole?
       </nav>
 
       <div className="p-4 mt-auto">
-        <div className="bg-[var(--surface-2)] p-4 rounded-md border border-[var(--border)] relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-16 h-16 bg-[var(--accent-muted)] rounded-full blur-xl -mr-8 -mt-8 pointer-events-none" />
-          <h4 className="text-sm font-semibold text-[var(--text-primary)]">Pro Tips</h4>
-          <p className="text-xs text-[var(--text-secondary)] mt-1.5 leading-relaxed">
+        <div className="bg-(--surface-2) p-4 rounded-md border border-(--border) relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-16 h-16 bg-(--accent-muted) rounded-full blur-xl -mr-8 -mt-8 pointer-events-none" />
+          <h4 className="text-sm font-semibold text-(--text-primary)">Pro Tips</h4>
+          <p className="text-xs text-(--text-secondary) mt-1.5 leading-relaxed">
             Log in daily to claim your daily streaks and bonus rewards.
           </p>
         </div>

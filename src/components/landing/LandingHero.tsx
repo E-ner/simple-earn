@@ -100,19 +100,6 @@ export default function LandingHero({ dict, lang }: LandingHeroProps) {
           </div>
         </div>
       </div>
-
-      {/* Static Dashboard preview image */}
-      <div className="max-w-6xl mx-auto px-6 mt-20 relative">
-        <div className="relative rounded-3xl overflow-hidden border border-(--border) bg-(--surface)">
-          <Image
-            src="/images/dashboard-new.png"
-            alt="Simple Earn Dashboard Preview"
-            width={1600}
-            height={800}
-            className="w-full h-auto object-cover"
-          />
-        </div>
-      </div>
     </section>
   )
 }
