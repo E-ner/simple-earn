@@ -65,7 +65,7 @@ export default async function AdminDashboard({ params }: { params: Promise<{ lan
           { label: 'Payments', path: 'payments' },
           { label: 'Support', path: 'support' },
         ].map(link => (
-          <Link key={link.path} href={`/${lang}/admin/${link.path}`}
+          <Link key={link.path} href={`/${lang}/admin/${link.path}` as any}
             className="p-4 bg-(--surface-2) border border-(--border) rounded-xl text-center text-xs font-bold text-(--text-secondary) hover:text-(--text-primary) hover:border-(--border-hover) transition-all"
           >
             {link.label}
@@ -77,7 +77,7 @@ export default async function AdminDashboard({ params }: { params: Promise<{ lan
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-black text-(--text-primary) uppercase tracking-widest">Pending Approvals</h2>
-          <Link href={`/${lang}/admin/transactions`} className="text-[10px] text-(--accent) hover:underline font-bold uppercase tracking-widest">View All</Link>
+          <Link href={`/${lang}/admin/transactions` as any} className="text-[10px] text-(--accent) hover:underline font-bold uppercase tracking-widest">View All</Link>
         </div>
 
         {pending.length === 0 ? (
