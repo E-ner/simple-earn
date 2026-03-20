@@ -1,17 +1,17 @@
 services:
   - type: web
     name: simple-earn
-    runtime: docker
-    plan: free # or your preferred plan
+    runtime: docker # This tells Render to look for a Dockerfile in your repo
+    plan: free
     envVars:
       - key: DATABASE_URL
         fromDatabase:
           name: simple-earn-db
           property: connectionString
       - key: NEXTAUTH_SECRET
-        sync: false # Set this in the Render dashboard or use generateValue: true
+        sync: false
       - key: NEXTAUTH_URL
-        value: https://simple-earn.onrender.com # Update to your real URL
+        value: https://simple-earn.onrender.com
       - key: ADMIN_EMAIL
         sync: false
       - key: ADMIN_PASSWORD
@@ -28,8 +28,9 @@ services:
         sync: false
       - key: EMAIL_FROM
         value: "Simple Earn <noreply@smartearn.com>"
-    # Seeding and startup
-    startCommand: sh -c "npx prisma migrate deploy && node reset-admin.js && node server.js"
+    
+    # FIX: Use `dockerCommand` instead of `startCommand` for Docker runtimes
+    dockerCommand: sh -c "npx prisma migrate deploy && node reset-admin.js && node server.js"
 
 databases:
   - name: simple-earn-db
