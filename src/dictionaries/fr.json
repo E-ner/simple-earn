@@ -1,0 +1,108 @@
+{
+  "common": {
+    "welcome": "Bienvenue",
+    "logout": "Déconnexion",
+    "dashboard": "Tableau de bord",
+    "wallet": "Portefeuille",
+    "videos": "Vidéos",
+    "quizzes": "Quiz",
+    "games": "Jeux",
+    "notifications": "Notifications",
+    "markAllRead": "Tout marquer comme lu"
+  },
+  "dashboard": {
+    "strategy_title": "Votre stratégie de gains pour aujourd'hui",
+    "strategy_desc": "Terminez vos tâches cognitives quotidiennes pour maintenir votre série. Chaque quiz vérifié ajoute 0,20 $ à votre solde. Regardez des vidéos à haut rendement pour débloquer des récompenses passives.",
+    "quick_start": "Guide de démarrage rapide",
+    "recent_activity": "Activité récente",
+    "balances": {
+      "main": "Solde principal",
+      "game": "Solde de jeu",
+      "total": "Total gagné"
+    }
+  },
+  "videos": {
+    "title": "Catalogue de gains",
+    "desc": "Regardez des modules de formation sélectionnés pour gagner des actifs numériques. Notre protocole d'attention vérifié récompense votre temps et votre engagement cognitif.",
+    "analyze": "Analyser la source",
+    "completed": "TERMINÉ"
+  },
+  "wallet": {
+    "title": "Centre financier",
+    "desc": "Gérez vos actifs vérifiés. Suivez chaque point gagné et initiez des retraits sécurisés vers votre canal de paiement préféré.",
+    "current_assets": "Actifs actuels",
+    "history": "Historique",
+    "withdraw": "Initier la sortie de capital",
+    "payout_channel": "Sélectionner le canal de paiement",
+    "submit": "Soumettre la demande de sortie",
+    "activate_title": "Initialisation du protocole de compte",
+    "activate_desc": "Initialisez votre nœud pour des frais de protocole uniques de 1,00 $.",
+    "activate_btn": "Initialiser le nœud maintenant",
+    "transfer_title": "Transfert interne de l'écosystème",
+    "transfer_desc": "Convertissez les actifs principaux en jetons de jeu.",
+    "transfer_btn": "Exécuter le transfert",
+    "transfer_to_game": "Transfert d'écosystème",
+    "deposit_game": "Injection de capital",
+    "deposit_title": "Protocole d'injection de capital",
+    "deposit_desc": "Ajoutez des fonds à votre solde principal via des canaux externes sécurisés.",
+    "deposit_btn": "Initialiser l'injection",
+    "deposit_amount": "Montant de l'injection (USD)",
+    "deposit_success": "Protocole d'injection de capital initié ! Système en attente de validation manuelle.",
+    "pay_ref": "Référence d'injection / ID de reçu",
+    "pending_audit": "audit en attente",
+    "available": "Actifs vérifiés",
+    "tokens": "Jetons de jeu",
+    "lifetime": "Rendement du protocole"
+  },
+  "games": {
+    "title": "Jeux de stratégie de jetons",
+    "desc": "Participez à des jeux de probabilité décentralisés pour multiplier vos jetons vérifiés.",
+    "play": "Entrer dans le jeu",
+    "select_token": "Identifier le jeton gagnant",
+    "win_msg": "Consensus réseau atteint : Vous avez gagné !",
+    "loss_msg": "Incohérence du protocole : Meilleure chance la prochaine fois.",
+    "cost": "Frais d'entrée",
+    "winnings": "Rendement attendu"
+  },
+  "tour": {
+    "welcome_title": "Bienvenue sur Simple Earn",
+    "welcome_desc": "Ce tour vous guidera à travers les principales fonctionnalités de votre tableau de bord de gains décentralisé.",
+    "balances_title": "Vos soldes",
+    "balances_desc": "Surveillez votre solde principal (retraits) et votre solde de jeu (pour jouer) en temps réel.",
+    "tasks_title": "Tâches de gains quotidiennes",
+    "tasks_desc": "Terminez des quiz et regardez des vidéos chaque jour pour maximiser vos rendements et maintenir votre série.",
+    "activity_title": "Journalisation transparente",
+    "activity_desc": "Chaque micro-transaction est enregistrée sur notre registre transparent pour votre examen."
+  },
+  "home": {
+    "nav": {
+      "protocol": "Protocole",
+      "pricing": "Tarification",
+      "faq": "FAQ",
+      "login": "Connexion",
+      "initialize": "Initialiser"
+    },
+    "hero": {
+      "v2_active": "Protocole V2.0 Actif",
+      "title_1": "L'Architecture",
+      "title_2": "des",
+      "title_3": "Récompenses.",
+      "desc": "Un écosystème de récompenses de haute précision pour le travail cognitif vérifié. Terminez des évaluations quotidiennes et débloquez une liquidité de niveau institutionnel.",
+      "cta": "Rejoindre le Réseau"
+    },
+    "features": {
+      "work_title": "Travail Vérifié",
+      "work_desc": "Algorithmes propriétaires assurant un engagement cognitif humain authentique pour chaque tâche.",
+      "yield_title": "Optimisation du Rendement",
+      "yield_desc": "Quotas quotidiens optimisés pour offrir une valeur maximale à l'attention dans le corridor GMT+2.",
+      "liquid_title": "Paiements Liquides",
+      "liquid_desc": "Retraits directs vers le nœud une fois que le seuil de 5 $ est validé par le réseau."
+    },
+    "pricing": {
+      "title": "Protocole d'Entrée",
+      "amount": "1,00 $",
+      "desc": "Validation à vie et accès complet aux fonctionnalités",
+      "cta": "Initialiser le Compte"
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "logout": "Logout",
+    "dashboard": "Dashboard",
+    "wallet": "Wallet",
+    "videos": "Videos",
+    "quizzes": "Quizzes",
+    "games": "Games",
+    "notifications": "Notifications",
+    "markAllRead": "Mark all read"
+  },
+  "dashboard": {
+    "strategy_title": "Your Earning Strategy for Today",
+    "strategy_desc": "Complete your daily cognitive tasks to maintain your streak. Each verified quiz adds $0.20 to your balance. Watch high-yield videos to unlock passive rewards.",
+    "quick_start": "Quick Start Guide",
+    "recent_activity": "Recent Activity",
+    "balances": {
+      "main": "Main Balance",
+      "game": "Game Balance",
+      "total": "Total Earned"
+    }
+  },
+  "videos": {
+    "title": "Earning Catalog",
+    "desc": "Watch curated training modules to earn digital assets. Our verified attention protocol rewards your time and cognitive engagement.",
+    "analyze": "Analyze Source",
+    "completed": "COMPLETED"
+  },
+  "wallet": {
+    "title": "Financial Hub",
+    "desc": "Manage your verified assets. Track every point earned and initiate secure withdrawals to your preferred payout channel.",
+    "current_assets": "Current Assets",
+    "history": "History",
+    "withdraw": "Initiate Capital Exit",
+    "payout_channel": "Select Payout Channel",
+    "submit": "Submit Exit Request",
+    "activate_title": "Account Protocol Initialization",
+    "activate_desc": "Initialize your node for a one-time protocol fee of $1.00.",
+    "activate_btn": "Initialize Node Now",
+    "transfer_title": "Internal Ecosystem Transfer",
+    "transfer_desc": "Convert main assets into gaming tokens.",
+    "transfer_btn": "Execute Transfer",
+    "transfer_to_game": "Ecosystem Transfer",
+    "deposit_game": "Capital Injection",
+    "deposit_title": "Capital Injection Protocol",
+    "deposit_desc": "Add funds to your main balance via secure external channels.",
+    "deposit_btn": "Initialize Injection",
+    "deposit_amount": "Injection Amount (USD)",
+    "deposit_success": "Capital injection protocol initiated! System waiting for manual validation.",
+    "pay_ref": "Injection Reference / Receipt ID",
+    "pending_audit": "audit pending",
+    "available": "Verified Assets",
+    "tokens": "Game Tokens",
+    "lifetime": "Protocol Yield"
+  },
+  "games": {
+    "title": "Token Strategy Games",
+    "desc": "Participate in decentralized probability games to multiply your verified tokens.",
+    "play": "Enter Game",
+    "select_token": "Identify Winning Token",
+    "win_msg": "Network Consensus Reached: You won!",
+    "loss_msg": "Protocol Mismatch: Better luck next time.",
+    "cost": "Entrance Fee",
+    "winnings": "Expected Yield"
+  },
+  "tour": {
+    "welcome_title": "Welcome to Simple Earn",
+    "welcome_desc": "This tour will guide you through the main features of your decentralized earning dashboard.",
+    "balances_title": "Your Balances",
+    "balances_desc": "Monitor your Main Balance (withdrawals) and Game Balance (for playing games) in real-time.",
+    "tasks_title": "Daily Earning Tasks",
+    "tasks_desc": "Complete quizzes and watch videos every day to maximize your yields and maintain your streak.",
+    "activity_title": "Transparent Logging",
+    "activity_desc": "Every micro-transaction is recorded on our transparent ledger for your review."
+  },
+  "home": {
+    "nav": {
+      "protocol": "Protocol",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "login": "Log in",
+      "initialize": "Initialize"
+    },
+    "hero": {
+      "v2_active": "V2.0 Protocol Active",
+      "title_1": "The Architecture",
+      "title_2": "of",
+      "title_3": "Rewards.",
+      "desc": "A high-precision reward ecosystem for verified cognitive work. Complete daily assessments and unlock institutional-grade liquidity.",
+      "cta": "Join Network"
+    },
+    "features": {
+      "work_title": "Verified Work",
+      "work_desc": "Proprietary algorithms ensuring authentic human cognitive engagement for every task.",
+      "yield_title": "Yield Optimization",
+      "yield_desc": "Daily quotas optimized to provide maximum value for attention in the GMT+2 corridor.",
+      "liquid_title": "Liquid Payouts",
+      "liquid_desc": "Direct-to-node withdrawals once the $5 threshold is validated by the network."
+    },
+    "pricing": {
+      "title": "Entry Protocol",
+      "amount": "$1.00",
+      "desc": "Lifetime Validation & Full Feature Access",
+      "cta": "Initialize Account"
+    }
+  },
+  "auth": {
+    "forgot_password_title": "Identity Recovery",
+    "forgot_password_desc": "Enter your verified email address to receive a cryptographic reset link.",
+    "send_reset_link": "Request Recovery Link",
+    "back_to_login": "Return to Authorization",
+    "reset_email_sent": "Recovery Protocol Initiated. Check your secure channel (Email).",
+    "reset_password_title": "Credential Update",
+    "reset_password_desc": "Configure your new authorization parameters below.",
+    "new_password": "New Cryptographic Key",
+    "confirm_new_password": "Confirm Key Mismatch Guard",
+    "update_password": "Commit New Credentials",
+    "password_reset_success": "Credentials updated successfully. System ready for re-authorization."
+  }
+}

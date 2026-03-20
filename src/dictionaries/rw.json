@@ -1,0 +1,108 @@
+{
+  "common": {
+    "welcome": "Murakaza neza",
+    "logout": "Gusohoka",
+    "dashboard": "Incamake",
+    "wallet": "Isakoshi",
+    "videos": "Videwo",
+    "quizzes": "Ibibazo",
+    "games": "Imikino",
+    "notifications": "Ibuburirwa",
+    "markAllRead": "Soma byose"
+  },
+  "dashboard": {
+    "strategy_title": "Ingamba zawe zo kwinjiza amafaranga uyu munsi",
+    "strategy_desc": "Uzuza imirimo yawe ya buri munsi kugira ngo ukomeze umuvuduko wawe. Buri bibazo byemejwe bituma winjiza $0.20 ku mafaranga yawe. Reba videwo zifite inyungu nyinshi kugira ngo ufungure ibihembo bidasanzwe.",
+    "quick_start": "Igitabo cy'ubufasha",
+    "recent_activity": "Ibyakozwe vuba",
+    "balances": {
+      "main": "Amafaranga asanzwe",
+      "game": "Amafaranga y'imikino",
+      "total": "Ayinjijwe yose"
+    }
+  },
+  "videos": {
+    "title": "Guhitamo ibyo kwinjiza",
+    "desc": "Reba inyigisho zateguwe kugira ngo winjize umutungo wa dijitari. Porotokore yacu yemeza umwanya wawe n'ubwenge bwawe.",
+    "analyze": "Kora isesengura",
+    "completed": "BYARANGUYE"
+  },
+  "wallet": {
+    "title": "Ihuriro ry'imari",
+    "desc": "Gunga umutungo wawe wemejwe. Kurikirana buri jambo ryose ryinjijwe kandi utangire gusohora amafaranga neza.",
+    "current_assets": "Umutungo ufite",
+    "history": "Ibyakozwe",
+    "withdraw": "Sohora amafaranga (Capital Exit)",
+    "payout_channel": "Hitamo aho wishyurirwa",
+    "submit": "Ohereza ubusabe bwo gusohora",
+    "activate_title": "Gutangiza Porotokore ya Konti",
+    "activate_desc": "Tangira konti yawe wishyura $1.00 rimwe gusa (Protocol Fee).",
+    "activate_btn": "Tangira Konti None",
+    "transfer_title": "Kwirinda Amafaranga muli Network",
+    "transfer_desc": "Hindura amafaranga asanzwe mu mafaranga y'imikino (Tokens).",
+    "transfer_btn": "Ohereza Amafaranga",
+    "transfer_to_game": "Kwirinda muli Network",
+    "deposit_game": "Kwinjiza muli Network",
+    "deposit_title": "Kwinjiza amafaranga muli Network",
+    "deposit_desc": "Shyira amafaranga kuri konti yawe ukoresheje uburyo bwo hanze bwizewe.",
+    "deposit_btn": "Tangira kwinjiza",
+    "deposit_amount": "Ayinjizwa (USD)",
+    "deposit_success": "Kwinjiza muli Network byatangiye! Tegereza ko byemezwa.",
+    "pay_ref": "Inomero y'ubwishyu",
+    "pending_audit": "itegereje kwemezwa",
+    "available": "Umutungo wemejwe",
+    "tokens": "Tokens z'imikino",
+    "lifetime": "Inyungu za porotokore"
+  },
+  "games": {
+    "title": "Ingamba z'imikino y'amafaranga",
+    "desc": "Gira uruhare mu mikino y'amahirwe kugira ngo ukube inshuro nyinshi amafaranga yawe yemejwe.",
+    "play": "Injira mu mukino",
+    "select_token": "Hitamo agasanduku katsinda",
+    "win_msg": "Ibyemezo by'urusobe: Watsinze!",
+    "loss_msg": "Porotokore ntabwo ihuye: Uzagerageze ubutaha.",
+    "cost": "Ayishyurwa",
+    "winnings": "Inyungu itegerejwe"
+  },
+  "tour": {
+    "welcome_title": "Murakaza neza kuri Simple Earn",
+    "welcome_desc": "Ubu bufasha buzayobora mu bintu by'ingenzi by'incamake yawe yo kwinjiza.",
+    "balances_title": "Amafaranga yawe",
+    "balances_desc": "Kurikirana amafaranga asanzwe (ayo usohora) n'amafaranga y'imikino (ayo ukina) ako kanya.",
+    "tasks_title": "Imirimo ya buri munsi",
+    "tasks_desc": "Uzuza ibibazo kandi urebe videwo buri munsi kugira ngo winjize byinshi kandi ukomeze umuvuduko wawe.",
+    "activity_title": "Ibyakozwe bigaragara",
+    "activity_desc": "Buri gikorwa cyose gito cyandikwa mu gitabo cyacu kigaragara kugira ngo uze kugisuzuma."
+  },
+  "home": {
+    "nav": {
+      "protocol": "Porotokore",
+      "pricing": "Ibiciro",
+      "faq": "Ibibazo",
+      "login": "Injira",
+      "initialize": "Tangira"
+    },
+    "hero": {
+      "v2_active": "Porotokore V2.0 Irakora",
+      "title_1": "Imiterere",
+      "title_2": "y'iby",
+      "title_3": "Injirwa.",
+      "desc": "Iburyo bwizewe bw'inyungu ku mirimo y'ubwenge yemejwe. Uzuza isuzuma rya buri munsi kandi ufungure amafaranga menshi.",
+      "cta": "Injira muri Network"
+    },
+    "features": {
+      "work_title": "Imirimo Yemejwe",
+      "work_desc": "Uburyo bwacu bwemeza ko ari umuntu nyawe ukora imirimo y'ubwenge muri buri gikorwa.",
+      "yield_title": "Kongera Inyungu",
+      "yield_desc": "Imirimo ya buri munsi yateguwe kugira ngo itange inyungu nyinshi ku mwanya wawe muri GMT+2.",
+      "liquid_title": "Gusohora Inyungu",
+      "liquid_desc": "Sohora amafaranga ako kanya iyo ugeze kuri $5 byemejwe na network."
+    },
+    "pricing": {
+      "title": "Kwinjira muri Protocore",
+      "amount": "$1.00",
+      "desc": "Kwemezwa burundu & kugera kuri byose",
+      "cta": "Fungura Konti"
+    }
+  }
+}
