@@ -30,7 +30,7 @@ services:
         value: "Simple Earn <noreply@smartearn.com>"
     
     # FIX: Use `dockerCommand` instead of `startCommand` for Docker runtimes
-    dockerCommand: sh -c "npx prisma migrate deploy && node reset-admin.js && node server.js"
+    dockerCommand: "npx prisma migrate deploy && node reset-admin.js && node server.js"
 
 databases:
   - name: simple-earn-db
