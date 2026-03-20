@@ -1,8 +1,9 @@
 import { withAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server"
+import { authOptions } from "@/lib/auth"
 
 export default withAuth(
-  function middleware(req) {
+  function middleware(req: any) {
     const token = req.nextauth.token
     const pathname = req.nextUrl.pathname
 
@@ -23,9 +24,9 @@ export default withAuth(
     }
   },
   {
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: authOptions.secret,
     callbacks: {
-      authorized: ({ token }) => !!token
+      authorized: ({ token }) => !!token,
     },
   }
 )

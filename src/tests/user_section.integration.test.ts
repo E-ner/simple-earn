@@ -41,7 +41,7 @@ vi.mock('next-auth', () => ({
   getServerSession: vi.fn(() => Promise.resolve({ user: { id: 'test-user-id', role: 'USER' } }))
 }))
 
-vi.mock('@/app/api/auth/[...nextauth]/route', () => ({ authOptions: {} }))
+vi.mock('@/lib/auth', () => ({ authOptions: {} }))
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }))
 
 import prisma from '@/lib/prisma'

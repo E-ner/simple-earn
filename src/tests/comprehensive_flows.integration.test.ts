@@ -29,7 +29,7 @@ vi.mock('next-auth', () => ({ getServerSession: mockGetServerSession }))
 vi.mock('next-auth/next', () => ({ getServerSession: mockGetServerSession }))
 import { getServerSession } from 'next-auth/next'
 
-vi.mock('@/app/api/auth/[...nextauth]/route', () => ({ authOptions: {} }))
+vi.mock('@/lib/auth', () => ({ authOptions: {} }))
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }))
 
 // ── Actions & Routes ────────────────────────────────────────────────────────
