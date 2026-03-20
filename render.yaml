@@ -18,6 +18,16 @@ services:
         sync: false
       - key: CRON_SECRET
         sync: false
+      - key: EMAIL_SERVER_HOST
+        value: smtp.gmail.com
+      - key: EMAIL_SERVER_PORT
+        value: "587"
+      - key: EMAIL_SERVER_USER
+        sync: false
+      - key: EMAIL_SERVER_PASSWORD
+        sync: false
+      - key: EMAIL_FROM
+        value: "Simple Earn <noreply@smartearn.com>"
     # Seeding and startup
     startCommand: sh -c "npx prisma migrate deploy && node reset-admin.js && node server.js"
 
