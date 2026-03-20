@@ -61,7 +61,7 @@ export async function POST(
       })
     } else {
       return NextResponse.json({ 
-        error: result.error || 'Failed to process' 
+        error: (result as any).message || 'Failed to process' 
       }, { status: 400 })
     }
 

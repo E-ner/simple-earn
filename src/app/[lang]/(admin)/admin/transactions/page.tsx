@@ -1,6 +1,6 @@
 import { getAllTransactions } from '@/app/actions/adminActions'
 import TransactionsTable from '@/components/admin/TransactionsTable'
-import { CreditCard } from 'lucide-react'
+import { CreditCard, Search } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 

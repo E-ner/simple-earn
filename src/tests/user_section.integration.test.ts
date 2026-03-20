@@ -105,17 +105,17 @@ describe('User Section Integration Tests', () => {
   // ── Wallet & Transactions ─────────────────────────────────────────────────
   describe('Wallet & Transactions', () => {
     it('should prevent withdrawal below minimum limit ($5)', async () => {
-      await expect(requestWithdrawal(2, 'Mobile Money')).rejects.toThrow()
+      await expect(requestWithdrawal(2, 'Mobile Money', '0780000000')).rejects.toThrow()
     })
 
     it('should prevent withdrawal if balance is insufficient', async () => {
       ;(prisma.user.findUnique as any).mockResolvedValue({ ...TEST_USER, mainBalance: 4 })
-      await expect(requestWithdrawal(200, 'Bank')).rejects.toThrow()
+      await expect(requestWithdrawal(200, 'Bank', '123456789')).rejects.toThrow()
     })
 
     it('should process a valid withdrawal and create a PENDING transaction', async () => {
       // It uses prisma.protocolTransaction.create directly, not $transaction
-      const result = await requestWithdrawal(10, 'Crypto')
+      const result = await requestWithdrawal(10, 'Crypto', '0x123...')
       expect(result.success).toBe(true)
       expect(prisma.protocolTransaction.create).toHaveBeenCalled()
     })

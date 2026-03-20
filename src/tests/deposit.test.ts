@@ -80,7 +80,7 @@ describe('Deposit System', () => {
     
     const result = await adminConfirmDeposit('tx-1')
     
-    expect(result.success).toBe(true)
+    expect((result as any).success).toBe(true)
     expect(prisma.protocolTransaction.update).toHaveBeenCalledWith({
       where: { id: 'tx-1' },
       data: { status: 'COMPLETED' }

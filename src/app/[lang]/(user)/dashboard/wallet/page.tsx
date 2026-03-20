@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Wallet, ArrowUpRight, ArrowDownLeft, History, DollarSign, ShieldCheck, Landmark, Loader2, ArrowRightLeft, Sparkles, Zap } from 'lucide-react'
-import { getWalletData, requestWithdrawal, transferToGameBalance, initiateDeposit, getPaymentMethods } from '@/app/actions/walletActions'
-import { Camera, Send } from 'lucide-react'
+import { Wallet, ArrowUpRight, ArrowDownLeft, History, DollarSign, ShieldCheck, Landmark, Loader2, ArrowRightLeft, Sparkles, Zap, CheckCircle2 } from 'lucide-react'
+import { getWalletData, requestWithdrawal, transferToGameBalance, initiateDeposit, getPaymentMethods, activateAccountWithProof } from '@/app/actions/walletActions'
+import { Camera, Send, X } from 'lucide-react'
 import { formatCurrency, getCurrencyFromCountry } from '@/lib/currency'
 import { useParams, useRouter } from 'next/navigation'
 import { getDictionary, Locale } from '@/lib/dictionary'
@@ -15,7 +15,7 @@ export default function WalletPage() {
   const router = useRouter()
   const { showToast } = useToast()
   const [activeTab, setActiveTab ] = useState<'history' | 'withdrawal' | 'transfer' | 'deposit'>('history')
-  const [selectedProof, setSelectedProof] = useState<string | null>(null)
+  const [viewImage, setViewImage] = useState<string | null>(null)
   const [data, setData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
@@ -299,7 +299,7 @@ export default function WalletPage() {
                           <div className="flex items-center gap-2">
                              {tx.proofImage && (
                                <button 
-                                 onClick={() => setSelectedProof(tx.proofImage)}
+                                 onClick={() => setViewImage(tx.proofImage)}
                                  className="text-[9px] text-(--accent) hover:underline uppercase font-bold tracking-tighter"
                                >
                                  View Receipt
