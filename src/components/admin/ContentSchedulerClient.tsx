@@ -80,7 +80,7 @@ export function ContentSchedulerClient({ quizzes, videos, initialSchedule, defau
   return (
     <div className="space-y-8">
       {/* Creation Tools */}
-      <div className="flex gap-4 mb-8">
+      <div className="flex flex-wrap gap-4 mb-8">
         <button onClick={() => { setShowVideoForm(!showVideoForm); setShowQuizForm(false) }} 
             className="flex items-center gap-2 px-4 py-2 bg-(--surface-2) text-(--text-primary) border border-(--border) rounded-lg text-xs font-bold hover:bg-(--surface)">
           <VideoIcon className="w-4 h-4 text-(--purple)" /> {showVideoForm ? 'Cancel' : 'New Video'}
@@ -92,9 +92,9 @@ export function ContentSchedulerClient({ quizzes, videos, initialSchedule, defau
       </div>
 
       {showVideoForm && (
-        <div className="p-6 bg-(--surface) border border-(--border) rounded-xl space-y-4 mb-8">
+        <div className="p-6 bg-(--surface) border border-(--border) rounded-xl space-y-4 mb-8 shadow-xl">
           <h3 className="text-sm font-black text-(--text-primary) uppercase">Create Video</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input type="text" placeholder="Title" value={videoForm.title} onChange={e => setVideoForm({...videoForm, title: e.target.value})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
             <input type="text" placeholder="YouTube/Cloudinary URL" value={videoForm.url} onChange={e => setVideoForm({...videoForm, url: e.target.value})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
             <input type="number" step="0.01" placeholder="Reward (e.g. 0.20)" value={videoForm.reward} onChange={e => setVideoForm({...videoForm, reward: Number(e.target.value)})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
@@ -105,21 +105,21 @@ export function ContentSchedulerClient({ quizzes, videos, initialSchedule, defau
       )}
 
       {showQuizForm && (
-        <div className="p-6 bg-(--surface) border border-(--border) rounded-xl space-y-4 mb-8">
+        <div className="p-6 bg-(--surface) border border-(--border) rounded-xl space-y-4 mb-8 shadow-xl">
           <h3 className="text-sm font-black text-(--text-primary) uppercase">Create Quiz (1 Question MVP)</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input type="text" placeholder="Quiz Title" value={quizForm.title} onChange={e => setQuizForm({...quizForm, title: e.target.value})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
             <input type="number" step="0.01" placeholder="Reward (e.g. 0.50)" value={quizForm.reward} onChange={e => setQuizForm({...quizForm, reward: Number(e.target.value)})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
-            <input type="text" placeholder="Question Text" value={quizForm.question} onChange={e => setQuizForm({...quizForm, question: e.target.value})} className="col-span-2 px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
+            <input type="text" placeholder="Question Text" value={quizForm.question} onChange={e => setQuizForm({...quizForm, question: e.target.value})} className="sm:col-span-2 px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
             <input type="text" placeholder="Option 1" value={quizForm.opt1} onChange={e => setQuizForm({...quizForm, opt1: e.target.value})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
             <input type="text" placeholder="Option 2" value={quizForm.opt2} onChange={e => setQuizForm({...quizForm, opt2: e.target.value})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
             <input type="text" placeholder="Option 3" value={quizForm.opt3} onChange={e => setQuizForm({...quizForm, opt3: e.target.value})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
             <input type="text" placeholder="Option 4" value={quizForm.opt4} onChange={e => setQuizForm({...quizForm, opt4: e.target.value})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
-            <div className="col-span-2 mt-2">
+            <div className="sm:col-span-2 mt-2">
               <label className="text-xs text-(--text-tertiary) block mb-2 font-bold uppercase tracking-widest">Select Correct Option</label>
-              <div className="flex gap-2">
+              <div className="grid grid-cols-2 sm:flex gap-2">
                 {[0, 1, 2, 3].map((idx) => (
-                  <button key={idx} onClick={() => setQuizForm({...quizForm, correct: idx})} className={`flex-1 py-2 rounded text-xs font-bold border transition-colors ${quizForm.correct === idx ? 'bg-(--accent) text-white border-(--accent)' : 'bg-(--surface-2) text-(--text-secondary) border-(--border) hover:bg-(--surface)'}`}>Option {idx + 1}</button>
+                  <button key={idx} onClick={() => setQuizForm({...quizForm, correct: idx})} className={`py-2 rounded text-xs font-bold border transition-colors ${quizForm.correct === idx ? 'bg-(--accent) text-white border-(--accent)' : 'bg-(--surface-2) text-(--text-secondary) border-(--border) hover:bg-(--surface)'}`}>Option {idx + 1}</button>
                 ))}
               </div>
             </div>
@@ -216,7 +216,7 @@ export function ContentSchedulerClient({ quizzes, videos, initialSchedule, defau
                     {q.questions && q.questions[0] && (
                       <div className="bg-(--surface-2) p-3 rounded text-[10px] font-mono text-(--text-secondary)">
                         <p className="text-(--text-primary) mb-2 font-sans font-bold">Q: {q.questions[0].question}</p>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           {q.questions[0].options.map((opt: string, i: number) => (
                             <div key={i} className={`px-2 py-1 rounded truncate ${i === q.questions[0].correctIndex ? 'bg-(--accent)/10 text-(--accent)' : 'bg-black/20'}`}>{i+1}. {opt}</div>
                           ))}

@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import {
   LayoutDashboard, Users, CreditCard, BookOpen,
-  Gamepad2, Banknote, MessageSquare, LogOut, ShieldCheck
+  Gamepad2, Banknote, MessageSquare, LogOut, ShieldCheck, X
 } from 'lucide-react'
 import ThemeToggle from '@/components/dashboard/ThemeToggle'
 
@@ -21,20 +21,30 @@ const NAV = [
   { label: 'Profile', icon: ShieldCheck, path: 'admin/profile' },
 ]
 
-export default function AdminSidebar({ lang }: { lang: string }) {
+export default function AdminSidebar({ lang, onClose }: { lang: string, onClose?: () => void }) {
   const pathname = usePathname()
 
   return (
-    <aside className="w-56 shrink-0 h-full bg-(--bg-overlay) border-r border-(--border) flex flex-col">
+    <aside className="w-full h-full bg-(--bg-overlay) flex flex-col">
       {/* Brand */}
-      <div className="px-4 py-5 border-b border-(--border) flex items-center gap-3">
-        <div className="w-7 h-7 rounded bg-(--purple) flex items-center justify-center shrink-0">
-          <ShieldCheck className="w-4 h-4 text-white" />
+      <div className="px-4 py-5 border-b border-(--border) flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-7 h-7 rounded bg-(--purple) flex items-center justify-center shrink-0">
+            <ShieldCheck className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <p className="text-[11px] font-black uppercase tracking-widest text-(--text-primary)">Admin Panel</p>
+            <p className="text-[9px] text-(--text-tertiary) uppercase tracking-widest">Root Access</p>
+          </div>
         </div>
-        <div>
-          <p className="text-[11px] font-black uppercase tracking-widest text-(--text-primary)">Admin Panel</p>
-          <p className="text-[9px] text-(--text-tertiary) uppercase tracking-widest">Root Access</p>
-        </div>
+        {onClose && (
+          <button 
+            onClick={onClose}
+            className="lg:hidden p-1.5 rounded-md hover:bg-(--surface) text-(--text-tertiary) transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       {/* Nav */}

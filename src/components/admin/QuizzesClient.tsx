@@ -42,19 +42,19 @@ export function QuizzesClient({ initialQuizzes }: { initialQuizzes: Quiz[] }) {
       {showQuizForm && (
         <div className="p-6 bg-(--surface) border border-(--border) rounded-xl space-y-4 shadow-xl">
           <h3 className="text-sm font-black text-(--text-primary) uppercase">Create New Quiz</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input type="text" placeholder="Quiz Title" value={quizForm.title} onChange={e => setQuizForm({...quizForm, title: e.target.value})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
             <input type="number" step="0.01" placeholder="Reward Ex: 0.50" value={quizForm.reward} onChange={e => setQuizForm({...quizForm, reward: Number(e.target.value)})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
-            <input type="text" placeholder="Question Text" value={quizForm.question} onChange={e => setQuizForm({...quizForm, question: e.target.value})} className="col-span-2 px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
+            <input type="text" placeholder="Question Text" value={quizForm.question} onChange={e => setQuizForm({...quizForm, question: e.target.value})} className="sm:col-span-2 px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
             <input type="text" placeholder="Option 1" value={quizForm.opt1} onChange={e => setQuizForm({...quizForm, opt1: e.target.value})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
             <input type="text" placeholder="Option 2" value={quizForm.opt2} onChange={e => setQuizForm({...quizForm, opt2: e.target.value})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
             <input type="text" placeholder="Option 3" value={quizForm.opt3} onChange={e => setQuizForm({...quizForm, opt3: e.target.value})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
             <input type="text" placeholder="Option 4" value={quizForm.opt4} onChange={e => setQuizForm({...quizForm, opt4: e.target.value})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
-            <div className="col-span-2 mt-2">
+            <div className="sm:col-span-2 mt-2">
               <label className="text-xs text-(--text-tertiary) block mb-2 font-bold uppercase tracking-widest">Select Correct Option</label>
-              <div className="flex gap-2">
+              <div className="grid grid-cols-2 sm:flex gap-2">
                 {[0, 1, 2, 3].map((idx) => (
-                  <button key={idx} onClick={() => setQuizForm({...quizForm, correct: idx})} className={`flex-1 py-2 rounded text-xs font-bold border transition-colors ${quizForm.correct === idx ? 'bg-(--accent) text-white border-(--accent)' : 'bg-(--surface-2) text-(--text-secondary) border-(--border) hover:bg-(--surface)'}`}>Option {idx + 1}</button>
+                  <button key={idx} onClick={() => setQuizForm({...quizForm, correct: idx})} className={`py-2 rounded text-xs font-bold border transition-colors ${quizForm.correct === idx ? 'bg-(--accent) text-white border-(--accent)' : 'bg-(--surface-2) text-(--text-secondary) border-(--border) hover:bg-(--surface)'}`}>Option {idx + 1}</button>
                 ))}
               </div>
             </div>
@@ -76,7 +76,7 @@ export function QuizzesClient({ initialQuizzes }: { initialQuizzes: Quiz[] }) {
             {q.questions && q.questions[0] && (
               <div className="bg-(--surface-2) p-4 rounded-md text-[11px] font-mono text-(--text-secondary) mt-2">
                 <p className="text-(--text-primary) mb-3 font-sans font-bold text-xs uppercase tracking-widest">{q.questions[0].question}</p>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {q.questions[0].options.map((opt: string, i: number) => (
                     <div key={i} className={`px-3 py-2 rounded-md truncate ${i === q.questions[0].correctIndex ? 'bg-(--accent) text-white' : 'bg-black/20'}`}>{i+1}. {opt}</div>
                   ))}

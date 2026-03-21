@@ -40,8 +40,8 @@ export function AdminUsersClient({ initialUsers, total, pages, lang }: {
   }
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
-      <div className="flex items-start justify-between mb-8">
+    <div className="p-4 sm:p-8 max-w-7xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-8">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <Users className="w-5 h-5 text-(--purple)" />
@@ -57,16 +57,16 @@ export function AdminUsersClient({ initialUsers, total, pages, lang }: {
             onChange={e => setSearch(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleSearch()}
             placeholder="Search by username or email..."
-            className="px-3 py-2 text-xs rounded-md bg-(--surface-2) border border-(--border) text-(--text-primary) placeholder:text-(--text-tertiary) focus:outline-none focus:border-(--border-focus) w-64"
+            className="px-3 py-2 text-xs rounded-md bg-(--surface-2) border border-(--border) text-(--text-primary) placeholder:text-(--text-tertiary) focus:outline-none focus:border-(--border-focus) w-full sm:w-64"
           />
-          <button onClick={handleSearch} className="p-2 rounded-md bg-(--surface-2) border border-(--border) text-(--text-tertiary) hover:text-(--text-primary) transition-colors">
+          <button onClick={handleSearch} className="p-2 rounded-md bg-(--surface-2) border border-(--border) text-(--text-tertiary) hover:text-(--text-primary) transition-colors shrink-0">
             <Search className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      <div className="border border-(--border) rounded-xl overflow-hidden">
-        <table className="w-full text-xs">
+      <div className="border border-(--border) rounded-xl overflow-x-auto">
+        <table className="w-full text-xs min-w-[800px]">
           <thead className="bg-(--surface) border-b border-(--border)">
             <tr>
               {['User', 'Status', 'Role', 'Main $', 'Game $', 'Country', 'Joined', 'Actions'].map(h => (

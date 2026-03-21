@@ -25,7 +25,7 @@ export default async function AdminDashboard({ params }: { params: Promise<{ lan
   const [stats, pending] = await Promise.all([getAdminStats(), getPendingTransactions()])
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-8 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-10">
         <div className="flex items-center gap-2 mb-2">
@@ -37,7 +37,7 @@ export default async function AdminDashboard({ params }: { params: Promise<{ lan
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
         <StatCard label="Total Users" value={stats.totalUsers} icon={Users} color="var(--purple)" />
         <StatCard label="Active Nodes" value={stats.activeUsers} icon={ShieldCheck} color="var(--accent)" />
         <StatCard label="Pending Approvals" value={stats.pendingTx} icon={Clock} color="var(--gold)" />
@@ -56,7 +56,7 @@ export default async function AdminDashboard({ params }: { params: Promise<{ lan
       />
 
       {/* Quick Links */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-10">
         {[
           { label: 'Users', path: 'users' },
           { label: 'Transactions', path: 'transactions' },
@@ -86,7 +86,7 @@ export default async function AdminDashboard({ params }: { params: Promise<{ lan
             <p className="text-sm font-bold text-(--text-tertiary)">All clear — no pending approvals</p>
           </div>
         ) : (
-          <div className="border border-(--border) rounded-xl overflow-hidden">
+          <div className="border border-(--border) rounded-xl overflow-x-auto">
             <table className="w-full text-xs">
               <thead className="bg-(--surface) border-b border-(--border)">
                 <tr>

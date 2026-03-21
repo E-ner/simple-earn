@@ -43,7 +43,7 @@ export function GameConfigClient({ initialConfig }: { initialConfig: GameConfig 
   }
 
   return (
-    <div className="max-w-4xl mx-auto pb-20">
+    <div className="max-w-4xl mx-auto px-4 sm:px-8 pb-20">
       <form onSubmit={handleSubmit} className="space-y-8">
         <div className="bg-(--surface) border border-(--border) rounded-xl overflow-hidden shadow-sm">
           <div className="p-6 border-b border-(--border) bg-(--surface-2)">

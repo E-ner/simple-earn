@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import AdminSidebar from '@/components/admin/AdminSidebar'
+import AdminLayoutClient from '@/components/admin/AdminLayoutClient'
 
 export default async function AdminLayout({ children, params }: { children: React.ReactNode, params: Promise<{ lang: string }> }) {
   const session = await getServerSession(authOptions)
@@ -12,11 +12,8 @@ export default async function AdminLayout({ children, params }: { children: Reac
   }
 
   return (
-    <div className="flex h-screen bg-(--bg-base) overflow-hidden">
-      <AdminSidebar lang={lang} />
-      <main className="flex-1 overflow-y-auto bg-(--bg-elevated)">
-        {children}
-      </main>
-    </div>
+    <AdminLayoutClient lang={lang}>
+      {children}
+    </AdminLayoutClient>
   )
 }

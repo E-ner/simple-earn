@@ -54,8 +54,8 @@ export function PaymentsClient({ initialMethods }: { initialMethods: PaymentMeth
 
       {showForm && (
         <div className="p-6 bg-(--surface) border border-(--accent)/20 rounded-xl space-y-4">
-          <h3 className="text-sm font-black text-(--text-primary)">New Payment Method</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <h3 className="text-sm font-black text-(--text-primary)">New Payment Method</h3>          
+          <div className="p-4 sm:p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
               <label className="block text-[10px] text-(--text-tertiary) uppercase tracking-widest font-black mb-1.5">Name *</label>
               <input value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
@@ -98,7 +98,7 @@ export function PaymentsClient({ initialMethods }: { initialMethods: PaymentMeth
       {/* Methods List */}
       <div className="space-y-3">
         {methods.map(method => (
-          <div key={method.id} className={`flex items-center justify-between p-5 rounded-xl border transition-all ${
+          <div key={method.id} className={`flex flex-col sm:flex-row sm:items-center justify-between p-5 rounded-xl border transition-all gap-4 ${
             method.isActive ? 'bg-(--surface) border-(--border)' : 'bg-(--surface-2) border-(--border) opacity-60'
           }`}>
             <div className="flex-1">

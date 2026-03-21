@@ -148,7 +148,7 @@ export function SupportAdminClient({ initialTickets }: { initialTickets: Ticket[
   return (
     <div className="space-y-5">
       {/* Filters */}
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {[null, 'OPEN', 'IN_PROGRESS', 'CLOSED'].map(f => (
           <button key={f ?? 'ALL'} onClick={() => setFilter(f)}
             className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-colors ${

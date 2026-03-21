@@ -52,7 +52,7 @@ export function VideosClient({ initialVideos }: { initialVideos: VideoItem[] }) 
       {showVideoForm && (
         <div className="p-6 bg-(--surface) border border-(--border) rounded-xl space-y-4 shadow-xl">
           <h3 className="text-sm font-black text-(--text-primary) uppercase">Add New Video</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input type="text" placeholder="Title" value={videoForm.title} onChange={e => setVideoForm({...videoForm, title: e.target.value})} className="col-span-2 px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
             <input type="text" placeholder="YouTube/Cloudinary Link" value={videoForm.url} onChange={e => setVideoForm({...videoForm, url: e.target.value})} className="col-span-2 px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
             <input type="number" step="0.01" placeholder="Reward Ex: 0.20" value={videoForm.reward} onChange={e => setVideoForm({...videoForm, reward: Number(e.target.value)})} className="px-3 py-2 bg-(--surface-2) border border-(--border) rounded-md text-xs text-(--text-primary)" />
