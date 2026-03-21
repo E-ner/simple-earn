@@ -1,37 +1,11 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 /**
  * Mail Utility for Simple Earn
- * In a real production environment, you would use a service like Resend or SendGrid.
- * Here we use a standard Nodemailer setup that can be configured via environment variables.
+ * Using Resend (https://resend.com) for reliable clinical-grade email delivery.
  */
 
-console.log('--- Initializing Mail Transport ---');
-console.log(`SMTP Host: ${process.env.EMAIL_SERVER_HOST}`);
-console.log(`SMTP Port: ${process.env.EMAIL_SERVER_PORT}`);
-console.log(`SMTP User: ${process.env.EMAIL_SERVER_USER ? 'SET' : 'NOT SET'}`);
-console.log(`SMTP Pass: ${process.env.EMAIL_SERVER_PASSWORD ? 'SET' : 'NOT SET'}`);
-
-const smtpPort = Number(process.env.EMAIL_SERVER_PORT) || 587;
-
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_SERVER_HOST,
-  port: smtpPort,
-  auth: {
-    user: process.env.EMAIL_SERVER_USER,
-    pass: process.env.EMAIL_SERVER_PASSWORD,
-  },
-  secure: smtpPort === 465,
-  connectionTimeout: 30000, // 30 seconds
-  greetingTimeout: 20000,
-  socketTimeout: 45000,
-  debug: true, // Show debug output
-  logger: true, // Log information in console
-  tls: {
-    rejectUnauthorized: false,
-    minVersion: 'TLSv1.2'
-  }
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 interface SendEmailOptions {
   to: string;
@@ -40,24 +14,26 @@ interface SendEmailOptions {
 }
 
 /**
- * Core function to send an email.
+ * Core function to send an email via Resend.
  */
 export async function sendEmail({ to, subject, html }: SendEmailOptions) {
   try {
-    const info = await transporter.sendMail({
-      from: process.env.EMAIL_FROM || '"Simple Earn" <noreply@smartearn.com>',
-      to,
+    const { data, error } = await resend.emails.send({
+      from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
+      to: [to],
       subject,
       html,
     });
-    console.log('Email sent: %s', info.messageId);
-    return { success: true, messageId: info.messageId };
-  } catch (error) {
-    console.error('Error sending email:', error);
-    // In dev, we might not have a real SMTP server, so we log it
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('Mail sending failed. Ensure EMAIL_SERVER_* env vars are set.');
+
+    if (error) {
+      console.error('Resend Error:', error);
+      return { success: false, error };
     }
+
+    console.log('Email sent via Resend: %s', data?.id);
+    return { success: true, messageId: data?.id };
+  } catch (error) {
+    console.error('Error sending email via Resend:', error);
     return { success: false, error };
   }
 }

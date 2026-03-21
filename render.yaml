@@ -18,13 +18,7 @@ services:
         sync: false
       - key: CRON_SECRET
         sync: false
-      - key: EMAIL_SERVER_HOST
-        value: smtp.gmail.com
-      - key: EMAIL_SERVER_PORT
-        value: "587"
-      - key: EMAIL_SERVER_USER
-        sync: false
-      - key: EMAIL_SERVER_PASSWORD
+      - key: RESEND_API_KEY
         sync: false
       - key: EMAIL_FROM
         value: "Simple Earn <noreply@smartearn.com>"
