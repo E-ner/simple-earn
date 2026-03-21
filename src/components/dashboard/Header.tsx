@@ -199,10 +199,11 @@ export default function Header({ user, onMenuClick }: HeaderProps) {
 
           <button 
             onClick={() => signOut({ callbackUrl: `/${lang}/login` as any })}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-md text-[10px] font-black uppercase tracking-widest text-(--text-tertiary) hover:text-(--error) hover:bg-(--error)/10 transition-all"
+            className="flex items-center gap-2 px-2 sm:px-3 py-1.5 rounded-md text-[10px] font-black uppercase tracking-widest text-(--text-tertiary) hover:text-(--error) hover:bg-(--error)/10 transition-all border border-transparent hover:border-(--error)/20"
+            title={dict?.common?.logout || 'Logout'}
           >
-            <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">{dict?.common?.logout || 'Logout'}</span>
+            <LogOut className="w-5 h-5 sm:w-4 sm:h-4" />
+            <span className="hidden md:inline">{dict?.common?.logout || 'Logout'}</span>
           </button>
           
           <div className="w-8 h-8 rounded-sm bg-gradient-to-tr from-(--accent) to-(--purple) p-[1.5px] hidden sm:block">

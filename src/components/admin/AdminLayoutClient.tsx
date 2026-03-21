@@ -1,11 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import { Menu, X, ShieldCheck } from 'lucide-react'
+import { Menu, X, ShieldCheck, LogOut } from 'lucide-react'
+import { signOut } from 'next-auth/react'
 import AdminSidebar from './AdminSidebar'
 
 export default function AdminLayoutClient({ children, lang }: { children: React.ReactNode, lang: string }) {
   const [isOpen, setIsOpen] = useState(false)
+
+  const handleLogout = () => signOut({ callbackUrl: `/${lang}/login` as any })
 
   return (
     <div className="flex h-screen bg-(--bg-base) overflow-hidden relative">
@@ -36,12 +39,21 @@ export default function AdminLayoutClient({ children, lang }: { children: React.
              </div>
              <span className="text-xs font-black uppercase tracking-widest text-(--text-primary)">Admin Panel</span>
           </div>
-          <button 
-            onClick={() => setIsOpen(true)}
-            className="p-2 rounded-md hover:bg-(--surface) text-(--text-secondary) transition-colors"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button 
+              onClick={handleLogout}
+              className="p-2 rounded-md hover:bg-(--surface) text-(--text-secondary) transition-colors"
+              title="Logout"
+            >
+              <LogOut className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={() => setIsOpen(true)}
+              className="p-2 rounded-md hover:bg-(--surface) text-(--text-secondary) transition-colors"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+          </div>
         </header>
 
         {/* Scrollable Main Area */}

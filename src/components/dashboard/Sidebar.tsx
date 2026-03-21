@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useParams } from 'next/navigation'
+import { signOut } from 'next-auth/react'
 import { getDictionary, Locale } from '@/lib/dictionary'
 
 export default function Sidebar({ userRole, isMobile, onLinkClick }: { userRole?: string, isMobile?: boolean, onLinkClick?: () => void }) {
@@ -83,6 +84,16 @@ export default function Sidebar({ userRole, isMobile, onLinkClick }: { userRole?
             Log in daily to claim your daily streaks and bonus rewards.
           </p>
         </div>
+        
+        <button
+          onClick={() => signOut({ callbackUrl: `/${lang}/login` as any })}
+          className="flex items-center gap-3 w-full mt-4 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-widest text-(--text-tertiary) hover:text-(--error) hover:bg-(--error)/10 transition-all border border-transparent hover:border-(--error)/20"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          {dict?.common?.logout || 'Logout'}
+        </button>
       </div>
     </aside>
   )
