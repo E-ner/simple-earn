@@ -6,21 +6,30 @@ import nodemailer from 'nodemailer';
  * Here we use a standard Nodemailer setup that can be configured via environment variables.
  */
 
+console.log('--- Initializing Mail Transport ---');
+console.log(`SMTP Host: ${process.env.EMAIL_SERVER_HOST}`);
+console.log(`SMTP Port: ${process.env.EMAIL_SERVER_PORT}`);
+console.log(`SMTP User: ${process.env.EMAIL_SERVER_USER ? 'SET' : 'NOT SET'}`);
+console.log(`SMTP Pass: ${process.env.EMAIL_SERVER_PASSWORD ? 'SET' : 'NOT SET'}`);
+
+const smtpPort = Number(process.env.EMAIL_SERVER_PORT) || 587;
+
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_SERVER_HOST,
-  
-  port: Number(process.env.EMAIL_SERVER_PORT),
+  port: smtpPort,
   auth: {
     user: process.env.EMAIL_SERVER_USER,
     pass: process.env.EMAIL_SERVER_PASSWORD,
   },
-  secure: process.env.EMAIL_SERVER_PORT === '465',
-  connectionTimeout: 20000, // Increase to 20 seconds
-  greetingTimeout: 10000,
-  socketTimeout: 30000,
+  secure: smtpPort === 465,
+  connectionTimeout: 30000, // 30 seconds
+  greetingTimeout: 20000,
+  socketTimeout: 45000,
+  debug: true, // Show debug output
+  logger: true, // Log information in console
   tls: {
-    // This can help in some cloud environments where the CA certificate chain is restricted
-    rejectUnauthorized: false
+    rejectUnauthorized: false,
+    minVersion: 'TLSv1.2'
   }
 });
 
