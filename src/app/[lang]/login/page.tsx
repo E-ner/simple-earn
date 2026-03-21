@@ -33,7 +33,13 @@ export default function LoginPage() {
       })
 
       if (result?.error) {
-        setError('Invalid email or password')
+        if (result.error === 'ACCOUNT_SUSPENDED') {
+          router.push('/en/suspended' as any)
+        } else if (result.error === 'EMAIL_NOT_VERIFIED') {
+          router.push(`/en/verify-email?email=${encodeURIComponent(data.email)}` as any)
+        } else {
+          setError('Invalid email or password')
+        }
       } else {
         router.push('/en/dashboard' as any)
       }
@@ -46,7 +52,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-(--bg-base) flex">
       {/* Left side - Brand/Illustration */}
       <div className="hidden lg:flex lg:w-1/2 p-12 flex-col justify-between border-r border-(--border) relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-(--bg-overlay) to-(--bg-elevated)" />
+        <div className="absolute inset-0 bg-linear-to-br from-(--bg-overlay) to-(--bg-elevated)" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_left_center,var(--accent-muted),transparent_50%)]" />
         
         <div className="relative z-10">
@@ -127,7 +133,7 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-(--radius-sm)">
+              <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-sm">
                 <p className="text-sm text-(--error) text-center font-medium" role="alert">
                   {error}
                 </p>

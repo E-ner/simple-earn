@@ -7,6 +7,26 @@ export default withAuth(
     const token = req.nextauth.token
     const pathname = req.nextUrl.pathname
 
+    // Block secondary checks (Suspension/Verification)
+    const isSuspended = token?.isSuspended
+    const isVerified = token?.isEmailVerified
+
+    if (isSuspended && !pathname.includes('/suspended')) {
+      const url = req.nextUrl.clone()
+      const lang = pathname.split('/')[1] || 'en'
+      url.pathname = `/${lang}/suspended`
+      return NextResponse.redirect(url)
+    }
+
+    if (!isVerified && !pathname.includes('/verify-email') && !pathname.includes('/login') && !pathname.includes('/register')) {
+      const url = req.nextUrl.clone()
+      const lang = pathname.split('/')[1] || 'en'
+      url.pathname = `/${lang}/verify-email`
+      // Optionally pass email in query param
+      if (token?.email) url.searchParams.set('email', token.email as string)
+      return NextResponse.redirect(url)
+    }
+
     // Block non-admin users from /admin/* routes
     if (pathname.includes('/admin') && token?.role !== 'ADMIN') {
       const url = req.nextUrl.clone()

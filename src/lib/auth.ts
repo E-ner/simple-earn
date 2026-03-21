@@ -12,6 +12,7 @@ declare module "next-auth" {
       username: string
       isActive: boolean
       isEmailVerified: boolean
+      isSuspended: boolean
     } & DefaultSession["user"]
   }
 }
@@ -37,8 +38,14 @@ export const authOptions: NextAuthOptions = {
 
         if (!user || !user.passwordHash) return null
 
-        const isValid = await bcrypt.compare(credentials.password, user.passwordHash)
-        if (!isValid) return null
+        // Enforce Verification and Suspension
+        if (user.isSuspended) {
+           throw new Error('ACCOUNT_SUSPENDED')
+        }
+        
+        if (!user.isEmailVerified) {
+           throw new Error('EMAIL_NOT_VERIFIED')
+        }
 
         return {
           id: user.id,
@@ -46,7 +53,8 @@ export const authOptions: NextAuthOptions = {
           username: user.username,
           role: user.role,
           isActive: user.isActive,
-          isEmailVerified: user.isEmailVerified
+          isEmailVerified: user.isEmailVerified,
+          isSuspended: user.isSuspended
         }
       }
     })
@@ -59,6 +67,7 @@ export const authOptions: NextAuthOptions = {
         token.username = (user as any).username
         token.isActive = (user as any).isActive
         token.isEmailVerified = (user as any).isEmailVerified
+        token.isSuspended = (user as any).isSuspended
       }
       return token
     },
@@ -69,6 +78,7 @@ export const authOptions: NextAuthOptions = {
         session.user.username = token.username as string
         session.user.isActive = token.isActive as boolean
         session.user.isEmailVerified = token.isEmailVerified as boolean
+        session.user.isSuspended = token.isSuspended as boolean
       }
       return session
     }

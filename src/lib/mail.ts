@@ -15,9 +15,13 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_SERVER_PASSWORD,
   },
   secure: process.env.EMAIL_SERVER_PORT === '465',
-  connectionTimeout: 10000, // 10 seconds
-  greetingTimeout: 5000,
-  socketTimeout: 15000,
+  connectionTimeout: 20000, // Increase to 20 seconds
+  greetingTimeout: 10000,
+  socketTimeout: 30000,
+  tls: {
+    // This can help in some cloud environments where the CA certificate chain is restricted
+    rejectUnauthorized: false
+  }
 });
 
 interface SendEmailOptions {

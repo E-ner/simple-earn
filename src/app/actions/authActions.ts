@@ -75,3 +75,37 @@ export async function resetPassword(token: string, newPassword: string) {
     return { success: false, error: 'Failed to reset password' }
   }
 }
+
+/**
+ * Resend a verification email.
+ */
+export async function resendVerificationEmail(email: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email }
+    })
+
+    if (!user || user.isEmailVerified) {
+      return { success: false, error: 'User not found or already verified' }
+    }
+
+    const verificationOTP = Math.floor(100000 + Math.random() * 900000).toString()
+    const expiry = new Date(Date.now() + 15 * 60 * 1000)
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        emailVerifyToken: verificationOTP,
+        emailVerifyExpiry: expiry
+      }
+    })
+
+    const { sendVerificationEmail } = await import('@/lib/mail')
+    await sendVerificationEmail(email, verificationOTP)
+
+    return { success: true }
+  } catch (error) {
+    console.error('Resend verification error:', error)
+    return { success: false, error: 'Failed to resend verification email' }
+  }
+}
