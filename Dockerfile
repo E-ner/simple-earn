@@ -9,39 +9,39 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci
 
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-RUN npx prisma generate
-ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build
 
 FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV PORT=3000
+ENV PORT=10000
 ENV HOSTNAME="0.0.0.0"
 
 RUN groupadd --system --gid 1001 nodejs
 RUN useradd --system --uid 1001 nextjs
 
-# Copy the standalone build (Next.js bundles everything into server.js)
+# 1. Copy the standalone build
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+
+# 2. CRITICAL: Copy ALL node_modules from builder so reset-admin.js has bcryptjs
+# and entrypoint.sh has the prisma binary.
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/reset-admin.js ./reset-admin.js
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 
-# Copy entrypoint
+# 3. Fix Home Directory Permissions for npm/npx cache
+RUN mkdir -p /home/nextjs/.npm && chown -R nextjs:nodejs /home/nextjs
+
+# 4. Copy and fix entrypoint
 COPY --chown=nextjs:nodejs entrypoint.sh ./
 RUN chmod +x entrypoint.sh
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 10000
 
-# Use the shell script to start
 ENTRYPOINT ["/bin/sh", "./entrypoint.sh"]
