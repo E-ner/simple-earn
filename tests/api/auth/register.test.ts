@@ -15,12 +15,8 @@ vi.mock('bcryptjs', () => ({
   default: { hash: vi.fn().mockResolvedValue('hashed-password') }
 }))
 
-vi.mock('nodemailer', () => ({
-  default: {
-    createTransport: vi.fn().mockReturnValue({
-      sendMail: vi.fn().mockResolvedValue({})
-    })
-  }
+vi.mock('@/lib/mail', () => ({
+  sendVerificationEmail: vi.fn().mockResolvedValue({ success: true })
 }))
 
 describe('Register API', () => {
