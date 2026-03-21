@@ -28,9 +28,6 @@ services:
         sync: false
       - key: EMAIL_FROM
         value: "Simple Earn <noreply@smartearn.com>"
-    
-    # FIX: Use `dockerCommand` instead of `startCommand` for Docker runtimes
-    dockerCommand: "npx prisma migrate deploy && node reset-admin.js && node server.js"
 
 databases:
   - name: simple-earn-db

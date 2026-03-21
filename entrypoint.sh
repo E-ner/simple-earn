@@ -1,4 +1,4 @@
 #!/bin/sh
-npx prisma migrate deploy
+npx prisma@5.22.0 migrate deploy
 node reset-admin.js
 node server.js
