@@ -15,7 +15,7 @@ export default async function DashboardPage() {
   if (!userId) return null
 
   // Fetch all necessary data in parallel
-  const [user, quizStats, videoStats, walletStats] = await Promise.all([
+  const [user, schedule, walletStats] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
       select: { 
@@ -30,37 +30,37 @@ export default async function DashboardPage() {
         }
       }
     }),
-    // Quiz stats for today
     (async () => {
       const today = new Date()
       today.setHours(0, 0, 0, 0)
-      const total = await prisma.quiz.count({ where: { isActive: true } })
-      const completed = await prisma.quizAttempt.count({
-        where: {
-          userId,
-          completedAt: { gte: today }
-        }
-      })
-      const pendingReward = (total - completed) * 0.20 // Assuming standard reward
-      return { completed, total, pendingReward }
-    })(),
-    // Video stats for today
-    (async () => {
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      const total = await prisma.video.count({ where: { isActive: true } })
-      const watched = await prisma.videoWatch.count({
-        where: {
-          userId,
-          watchedAt: { gte: today }
-        }
-      })
-      const maxReward = (total - watched) * 0.50 // Mocking reward calculation
-      return { watched, total, maxReward }
+      return prisma.dailySchedule.findUnique({ where: { date: today } })
     })(),
     getEarningsStats() as any
   ])
 
+  // Process Stats based on schedule
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const [quizAttempts, videoWatches] = await Promise.all([
+    prisma.quizAttempt.count({ where: { userId, completedAt: { gte: today } } }),
+    prisma.videoWatch.count({ where: { userId, watchedAt: { gte: today } } })
+  ])
+
+  const quizTotal = (schedule?.quizIds as string[])?.length || 4
+  const videoTotal = (schedule?.videoIds as string[])?.length || 2
+
+  const quizStats = {
+    completed: quizAttempts,
+    total: quizTotal,
+    pendingReward: Math.max(0, quizTotal - quizAttempts) * 0.50 
+  }
+
+  const videoStats = {
+    watched: videoWatches,
+    total: videoTotal,
+    maxReward: Math.max(0, videoTotal - videoWatches) * 0.20
+  }
   const { chartData: actualChartData, totalEarned: reconciledTotalEarned, user: walletUser } = walletStats
 
   // Compute Total Earned from all-time EARNING and GAME_WIN transactions

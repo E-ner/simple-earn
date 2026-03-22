@@ -7,6 +7,8 @@ import { revalidatePath } from 'next/cache'
 import fs from 'fs'
 import path from 'path'
 
+import { getCurrencyFromCountry, convertToUSD, formatCurrency, formatRaw } from '@/lib/currency'
+
 async function getAuthUser() {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) throw new Error('Unauthorized')
@@ -14,18 +16,38 @@ async function getAuthUser() {
 }
 
 async function saveProofImage(base64Data: string, userId: string) {
-  if (!base64Data.startsWith('data:image/')) return base64Data // Already a path or invalid
+  if (!base64Data.startsWith('data:image/')) return base64Data
+
+  // Extract MIME type from the data URI (e.g. "image/jpeg", "image/png")
+  const mimeMatch = base64Data.match(/^data:(image\/[a-zA-Z+]+);base64,/)
+  if (!mimeMatch) throw new Error('Invalid image data')
+
+  const mimeType = mimeMatch[1]
+
+  // Allowed upload formats — SVG is excluded for security reasons
+  const ALLOWED: Record<string, string> = {
+    'image/jpeg': 'jpg',
+    'image/jpg':  'jpg',
+    'image/png':  'png',
+    'image/webp': 'webp',
+    'image/gif':  'gif',
+    'image/avif': 'avif',
+    'image/heic': 'heic',
+    'image/heif': 'heif',
+  }
+
+  const ext = ALLOWED[mimeType]
+  if (!ext) {
+    throw new Error(
+      `Unsupported file format: ${mimeType}. Please upload a JPEG, PNG, WebP, or GIF image.`
+    )
+  }
 
   const buffer = Buffer.from(base64Data.split(',')[1], 'base64')
-  const fileName = `${userId}_${Date.now()}.png`
+  const fileName = `${userId}_${Date.now()}.${ext}`
   const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'proofs')
-  
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true })
-  }
-  
-  const filePath = path.join(uploadDir, fileName)
-  fs.writeFileSync(filePath, buffer)
+  if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true })
+  fs.writeFileSync(path.join(uploadDir, fileName), buffer)
   return `/uploads/proofs/${fileName}`
 }
 
@@ -39,7 +61,7 @@ export async function getEarningsStats() {
     prisma.protocolTransaction.findMany({
       where: { userId: user.id },
       orderBy: { createdAt: 'desc' },
-      take: 10
+      take: 20
     })
   ])
 
@@ -50,30 +72,40 @@ export async function getEarningsStats() {
     _sum: { amount: true }
   })
 
-  // Generate 7-day chart data (mocked for now based on recent approved transactions)
+  const sevenDaysAgo = new Date()
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6)
+  sevenDaysAgo.setHours(0, 0, 0, 0)
+
+  const recentEarnings = await prisma.protocolTransaction.findMany({
+    where: { userId: user.id, type: 'EARNING', status: 'COMPLETED', createdAt: { gte: sevenDaysAgo } },
+    select: { amount: true, createdAt: true }
+  })
+
   const chartData = []
   for (let i = 6; i >= 0; i--) {
     const date = new Date()
     date.setDate(date.getDate() - i)
-    chartData.push({
-      date: date.toLocaleDateString('en-US', { weekday: 'short' }),
-      earnings: Math.random() * 2 // Mock yield
-    })
+    const dateStr = date.toISOString().split('T')[0]
+    const dayEarnings = recentEarnings
+      .filter(tx => tx.createdAt.toISOString().split('T')[0] === dateStr)
+      .reduce((sum, tx) => sum + Number(tx.amount), 0)
+    chartData.push({ date: date.toLocaleDateString('en-US', { weekday: 'short' }), earnings: dayEarnings })
   }
 
-  // Group by main and game
   const main = Number(dbUser.mainBalance)
   const game = Number(dbUser.gameBalance)
 
   return {
-    balances: {
-      main,
-      game,
-      total: main + game
-    },
+    balances: { main, game, total: main + game },
     totalEarned: Number(stats._sum.amount || 0),
     chartData,
-    transactions: transactions.map(tx => ({ ...tx, amount: Number(tx.amount) })),
+    transactions: transactions.map(tx => ({
+      ...tx,
+      amount: Number(tx.amount),
+      // localAmount: what the user originally entered in their local currency
+      // Falls back to amount (USD) for old records or internal-only transactions
+      localAmount: Number((tx as any).localAmount ?? tx.amount),
+    })),
     country: dbUser.country,
     user: {
       isActivated: dbUser.isActivated,
@@ -86,15 +118,27 @@ export async function getEarningsStats() {
 
 export const getWalletData = getEarningsStats
 
-export async function initiateDeposit(amount: number, method: string, proofImage: string, reference: string) {
+/**
+ * DEPOSIT: user enters amount in LOCAL currency (e.g. 5000 RWF).
+ * Stored as:
+ *   amount      = USD equivalent (used by approveTransaction to credit balance)
+ *   localAmount = what the user typed (shown in history)
+ *   currency    = their local currency code
+ */
+export async function initiateDeposit(localAmount: number, method: string, proofImage: string, reference: string) {
   const user = await getAuthUser()
+  const dbUser = await prisma.user.findUnique({ where: { id: user.id }, select: { country: true } })
+  const currency = getCurrencyFromCountry(dbUser?.country || 'US')
+  const usdAmount = convertToUSD(localAmount, currency)
   const proofPath = await saveProofImage(proofImage, user.id)
 
-  await prisma.protocolTransaction.create({
+  await (prisma.protocolTransaction as any).create({
     data: {
       userId: user.id,
       type: 'DEPOSIT',
-      amount: amount,
+      amount: usdAmount,
+      currency,
+      localAmount,
       paymentMethod: method,
       paymentReference: reference,
       proofImage: proofPath,
@@ -107,23 +151,34 @@ export async function initiateDeposit(amount: number, method: string, proofImage
   return { success: true }
 }
 
-
-export async function initiateWithdrawal(amount: number, method: string, address: string) {
+/**
+ * WITHDRAWAL: user picks USD amount from their USD balance.
+ */
+export async function initiateWithdrawal(localAmount: number, method: string, address: string) {
   const user = await getAuthUser()
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id } })
-  
-  if (!dbUser || Number(dbUser.mainBalance) < amount) {
-    throw new Error('Insufficient balance')
+  const dbUser = await prisma.user.findUnique({ where: { id: user.id }, select: { mainBalance: true, country: true } })
+  if (!dbUser) throw new Error('User not found')
+
+  const currency = getCurrencyFromCountry(dbUser.country || 'US')
+  const usdAmount = convertToUSD(localAmount, currency)
+
+  if (usdAmount < 1) {
+    throw new Error(`Minimum withdrawal is ${formatCurrency(1, currency)}.`)
   }
-  if (amount < 5) {
-    throw new Error('Minimum withdrawal is $5')
+  if (usdAmount > 100) {
+    throw new Error(`Maximum withdrawal is ${formatCurrency(100, currency)}.`)
+  }
+  if (Number(dbUser.mainBalance) < usdAmount) {
+    throw new Error(`Insufficient balance. You have ${formatCurrency(Number(dbUser.mainBalance), currency)} available.`)
   }
 
-  await prisma.protocolTransaction.create({
+  await (prisma.protocolTransaction as any).create({
     data: {
       userId: user.id,
       type: 'WITHDRAWAL',
-      amount,
+      amount: usdAmount,      // USD — used by approveTransaction to deduct balance
+      currency,               // user's local currency
+      localAmount,            // what user entered, shown in history
       paymentMethod: method,
       paymentReference: address,
       status: 'PENDING'
@@ -136,15 +191,22 @@ export async function initiateWithdrawal(amount: number, method: string, address
 
 export const requestWithdrawal = initiateWithdrawal
 
-
-export async function activateAccountWithProof(method: string, reference: string, proofImage: string) {
+/**
+ * ACTIVATION: user pays in local currency.
+ */
+export async function activateAccountWithProof(method: string, reference: string, proofImage: string, localAmount: number) {
   const user = await getAuthUser()
-  
-  await prisma.protocolTransaction.create({
+  const dbUser = await prisma.user.findUnique({ where: { id: user.id }, select: { country: true } })
+  const currency = getCurrencyFromCountry(dbUser?.country || 'US')
+  const usdAmount = convertToUSD(localAmount, currency)
+
+  await (prisma.protocolTransaction as any).create({
     data: {
       userId: user.id,
       type: 'ACTIVATION',
-      amount: 10.00, // Activation fee
+      amount: usdAmount,
+      currency,
+      localAmount,
       paymentMethod: method,
       paymentReference: reference,
       proofImage: proofImage,
@@ -156,15 +218,23 @@ export async function activateAccountWithProof(method: string, reference: string
   return { success: true }
 }
 
-export async function gameDepositWithProof(amount: number, method: string, reference: string, proofImage: string) {
+/**
+ * GAME DEPOSIT: user pays in local currency.
+ */
+export async function gameDepositWithProof(localAmount: number, method: string, reference: string, proofImage: string) {
   const user = await getAuthUser()
+  const dbUser = await prisma.user.findUnique({ where: { id: user.id }, select: { country: true } })
+  const currency = getCurrencyFromCountry(dbUser?.country || 'US')
+  const usdAmount = convertToUSD(localAmount, currency)
   const proofPath = await saveProofImage(proofImage, user.id)
 
-  await prisma.protocolTransaction.create({
+  await (prisma.protocolTransaction as any).create({
     data: {
       userId: user.id,
       type: 'GAME_DEPOSIT',
-      amount,
+      amount: usdAmount,
+      currency,
+      localAmount,
       paymentMethod: method,
       paymentReference: reference,
       proofImage: proofPath,
@@ -177,38 +247,40 @@ export async function gameDepositWithProof(amount: number, method: string, refer
 }
 
 /**
- * Transfers funds from Main Balance to Game Balance.
+ * TRANSFER: user enters amount in local currency.
+ * Converted to USD for balance math, local amount kept for display.
  */
-export async function transferToGameBalance(amount: number) {
+export async function transferToGameBalance(localAmount: number) {
   const user = await getAuthUser()
-  if (amount <= 0) return { error: 'Invalid amount' }
+  if (localAmount <= 0) return { error: 'Invalid amount' }
+
+  const dbUser = await prisma.user.findUnique({ where: { id: user.id }, select: { country: true } })
+  const currency = getCurrencyFromCountry(dbUser?.country || 'US')
+  const usdAmount = convertToUSD(localAmount, currency)
 
   try {
     return await prisma.$transaction(async (tx: any) => {
-      const dbUser = await tx.user.findUnique({
-        where: { id: user.id }
-      })
+      const freshUser = await tx.user.findUnique({ where: { id: user.id } })
+      if (!freshUser) throw new Error('User not found')
+      if (Number(freshUser.mainBalance) < usdAmount) throw new Error('Insufficient main balance')
 
-      if (!dbUser) throw new Error('User not found')
-      if (Number(dbUser.mainBalance) < amount) throw new Error('Insufficient main balance')
-
-      // Update balances
       await tx.user.update({
         where: { id: user.id },
         data: {
-          mainBalance: { decrement: amount },
-          gameBalance: { increment: amount }
+          mainBalance: { decrement: usdAmount },
+          gameBalance: { increment: usdAmount }
         }
       })
 
-      // Record transaction
       await tx.protocolTransaction.create({
         data: {
           userId: user.id,
           type: 'TRANSFER',
-          amount: amount,
+          amount: usdAmount,      // USD stored in balance
+          currency,               // user's local currency
+          localAmount,           // what they typed
           status: 'COMPLETED',
-          notes: 'Internal Transfer: Main to Game Balance'
+          notes: 'Internal Transfer: Main → Game Balance'
         }
       })
 
@@ -222,24 +294,21 @@ export async function transferToGameBalance(amount: number) {
   }
 }
 
-/**
- * Fetches active payment methods.
- */
 export async function getPaymentMethods() {
-  return await prisma.paymentMethod.findMany({
-    where: { isActive: true }
-  })
+  return await prisma.paymentMethod.findMany({ where: { isActive: true } })
 }
-/**
- * Fetches all transactions for the authenticated user.
- */
+
 export async function getUserTransactions() {
   const user = await getAuthUser()
   const transactions = await prisma.protocolTransaction.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: 'desc' }
   })
-  return transactions.map(tx => ({ ...tx, amount: Number(tx.amount) }))
+  return transactions.map(tx => ({
+    ...tx,
+    amount: Number(tx.amount),
+    localAmount: Number((tx as any).localAmount ?? tx.amount),
+  }))
 }
 
 export const getAllTransactions = getUserTransactions

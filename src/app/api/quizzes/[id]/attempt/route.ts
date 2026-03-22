@@ -76,6 +76,7 @@ export async function POST(
 
     // Grade the quiz securely on server
     let correctCount = 0
+    const totalQuestions = quiz.questions.length
     
     for (const answer of answers) {
       const question = quiz.questions.find((q: any) => q.id === answer.questionId)
@@ -84,16 +85,14 @@ export async function POST(
       }
     }
 
-    // Assuming passing score is 100% for full reward, or we scale it.
-    // Let's implement strict pass (all correct = true)
-    const passed = correctCount === quiz.questions.length
-    const earnedAmount = passed ? quiz.reward : 0
+    // Relaxed passing criteria: Any correct answer gets a reward!
+    const passed = correctCount > 0
+    const earnedAmount = totalQuestions > 0 ? (correctCount / totalQuestions) * Number(quiz.reward) : 0
 
     // Database updates in a Transaction
     const result = await prisma.$transaction(async (tx: any) => {
       // 1. Create Attempt Record
       const attemptDate = new Date()
-      // Use attemptDate for scheduledDate simulation for now to satisfy schema
       
       const attempt = await tx.quizAttempt.create({
         data: {
@@ -106,8 +105,8 @@ export async function POST(
         }
       })
 
-      // 2. Award User main balance and Transaction log if passed
-      if (passed && Number(earnedAmount) > 0) {
+      // 2. Award User main balance and Transaction log if earned > 0
+      if (Number(earnedAmount) > 0) {
         await tx.user.update({
           where: { id: userId },
           data: { mainBalance: { increment: earnedAmount } }
@@ -119,7 +118,7 @@ export async function POST(
             type: 'EARNING',
             amount: earnedAmount,
             status: 'COMPLETED',
-            notes: `Quiz Reward: ${quiz.title}`
+            notes: `Quiz Reward: ${quiz.title} (${correctCount}/${totalQuestions} correct)`
           }
         })
       }

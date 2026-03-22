@@ -46,7 +46,6 @@ export default function LandingFooter({ lang = 'en' }: LandingFooterProps) {
               <div className="space-y-4">
                 <Link href={`/${lang}/register`} className="block text-xs text-(--text-tertiary) hover:text-(--accent) transition-all">Initialize Node</Link>
                 <Link href={`/${lang}/login`} className="block text-xs text-(--text-tertiary) hover:text-(--accent) transition-all">Sign In</Link>
-                <Link href={`/${lang}/forgot-password`} className="block text-xs text-(--text-tertiary) hover:text-(--accent) transition-all">Credential Recovery</Link>
               </div>
             </div>
           </div>

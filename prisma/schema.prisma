@@ -86,6 +86,7 @@ model ProtocolTransaction {
   type             TxType
   amount           Decimal   @db.Decimal(10,2)
   currency         String    @default("USD")
+  localAmount      Decimal?  @db.Decimal(10,2)
   status           TxStatus  @default(PENDING)
   paymentMethod    String?
   paymentReference String?
@@ -98,6 +99,7 @@ model ProtocolTransaction {
   @@index([userId])
   @@index([status])
 }
+
 
 model Quiz {
   id          String        @id @default(uuid())
@@ -167,15 +169,27 @@ model VideoWatch {
   @@index([userId, scheduledDate])
 }
 
+model DailySchedule {
+  id                    String   @id @default(uuid())
+  date                  DateTime @unique @db.Date
+  quizIds               Json     // Array of quiz IDs
+  videoIds              Json     // Array of video IDs
+  // Daily winning numbers for games
+  t2000WinningNumbers   Json    @default("[7, 77, 777]")
+  t5000WinningNumbers   Json    @default("[8, 88, 888]")
+  t10000WinningNumbers  Json    @default("[9, 99, 999]")
+  createdAt             DateTime @default(now())
+}
+
 model GameConfig {
-  id                String   @id @default("singleton")
-  t2000WinToken     String   @default("A")
-  t5000WinToken     String   @default("B")
-  t10000WinToken    String   @default("C")
-  t2000DailyLimit   Int      @default(3)
-  t5000DailyLimit   Int      @default(3)
-  t10000DailyLimit  Int      @default(3)
-  updatedAt         DateTime @updatedAt
+  id                    String   @id @default("singleton")
+  t2000DailyLimit       Int      @default(3)
+  t5000DailyLimit       Int      @default(3)
+  t10000DailyLimit      Int      @default(3)
+  t2000NumberPool       Json     @default("[7, 77, 777]")
+  t5000NumberPool       Json     @default("[8, 88, 888]")
+  t10000NumberPool      Json     @default("[9, 99, 999]")
+  updatedAt             DateTime @updatedAt
 }
 
 model GamePlay {
@@ -185,6 +199,7 @@ model GamePlay {
   gameType    GameType
   tokenPicked String
   winToken    String
+  winNumbers  Json?
   didWin      Boolean
   amount      Decimal   @db.Decimal(10,2)
   winnings    Decimal   @default(0) @db.Decimal(10,2)
@@ -193,13 +208,6 @@ model GamePlay {
   @@index([userId, gameType, createdAt])
 }
 
-model DailySchedule {
-  id        String   @id @default(uuid())
-  date      DateTime @unique @db.Date
-  quizIds   Json
-  videoIds  Json
-  createdAt DateTime @default(now())
-}
 
 model Notification {
   id        String   @id @default(uuid())

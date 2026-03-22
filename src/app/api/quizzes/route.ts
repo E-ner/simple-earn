@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from "@/lib/auth"
 import prisma from '@/lib/prisma'
+import { getTodayUTC } from '@/lib/dateconfig'
 
 export async function GET() {
   try {
@@ -11,10 +12,23 @@ export async function GET() {
     }
 
     const userId = session.user.id
+    const today = getTodayUTC()
 
-    // Only get active quizzes
+    const schedule = await prisma.dailySchedule.findUnique({
+      where: { date: today }
+    })
+
+    if (!schedule || !Array.isArray(schedule.quizIds) || schedule.quizIds.length === 0) {
+      return NextResponse.json({ quizzes: [] })
+    }
+
+    const scheduledQuizIds = schedule.quizIds as string[]
+
     const quizzes = await prisma.quiz.findMany({
-      where: { isActive: true },
+      where: {
+        id: { in: scheduledQuizIds },
+        isActive: true
+      },
       include: {
         questions: {
           select: { id: true, question: true, options: true, order: true }
@@ -22,23 +36,15 @@ export async function GET() {
       }
     })
 
-    // Check which ones the user has already attempted today
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-    
-    // Using simple approach without composite scheduledDate checks for now
     const attempts = await prisma.quizAttempt.findMany({
       where: {
         userId,
-        completedAt: {
-          gte: today
-        }
+        completedAt: { gte: today }
       }
     })
 
     const attemptedQuizIds = new Set(attempts.map((a: { quizId: string }) => a.quizId))
 
-    // Mask the correctIndex from the user so they can't cheat via devtools
     const safeQuizzes = quizzes.map((quiz: any) => ({
       ...quiz,
       questions: quiz.questions.map((q: any) => ({

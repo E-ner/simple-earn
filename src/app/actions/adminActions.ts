@@ -169,7 +169,11 @@ export async function getPendingTransactions() {
     orderBy: { createdAt: 'asc' },
     include: { user: { select: { username: true, email: true } } },
   })
-  return txs.map(tx => ({ ...tx, amount: Number(tx.amount) }))
+  return txs.map(tx => ({
+    ...tx,
+    amount: Number(tx.amount),
+    localAmount: Number((tx as any).localAmount ?? tx.amount),
+  }))
 }
 
 export async function getAllTransactions(page = 1) {
@@ -184,58 +188,71 @@ export async function getAllTransactions(page = 1) {
     }),
     prisma.protocolTransaction.count(),
   ])
-  return { 
-    transactions: transactions.map(tx => ({ ...tx, amount: Number(tx.amount) })), 
-    total, 
-    pages: Math.ceil(total / take) 
+  return {
+    transactions: transactions.map(tx => ({
+      ...tx,
+      amount: Number(tx.amount),
+      localAmount: Number((tx as any).localAmount ?? tx.amount),
+    })),
+    total,
+    pages: Math.ceil(total / take)
   }
 }
+ 
+import { formatRaw, convertToUSD } from '@/lib/currency'
 
 export async function approveTransaction(txId: string) {
   await requireAdmin()
   const admin = await requireAdmin()
   const tx = await prisma.protocolTransaction.findUnique({ where: { id: txId } })
   if (!tx) throw new Error('Transaction not found')
-
+ 
   await prisma.$transaction(async (db) => {
+    // amount is always stored as USD — no conversion needed
+    const usdAmount = Number(tx.amount)
+ 
     await db.protocolTransaction.update({
       where: { id: txId },
       data: { status: 'APPROVED', approvedBy: admin.id, approvedAt: new Date() }
     })
-    // For withdrawals, deduct from user balance
+ 
     if (tx.type === 'WITHDRAWAL') {
       await db.user.update({
         where: { id: tx.userId },
-        data: { mainBalance: { decrement: tx.amount } }
+        data: { mainBalance: { decrement: usdAmount } }
       })
     }
-    // For deposits, credit user balance
     if (tx.type === 'DEPOSIT') {
       await db.user.update({
         where: { id: tx.userId },
-        data: { mainBalance: { increment: tx.amount } }
+        data: { mainBalance: { increment: usdAmount } }
       })
     }
-    // For activation, set both isActive and isActivated to true
     if (tx.type === 'ACTIVATION') {
       await db.user.update({
         where: { id: tx.userId },
         data: { isActive: true, isActivated: true }
       })
     }
-    // For game deposit, credit game balance
     if (tx.type === 'GAME_DEPOSIT') {
       await db.user.update({
         where: { id: tx.userId },
-        data: { gameBalance: { increment: tx.amount } }
+        data: { gameBalance: { increment: usdAmount } }
       })
     }
-    // Notify user
+ 
+    // Show localAmount in local currency in the notification (what user actually paid/received)
+    const displayAmount = (tx as any).localAmount
+      ? formatRaw(Number((tx as any).localAmount), tx.currency || 'USD')
+      : formatRaw(usdAmount, 'USD')
+ 
     await db.notification.create({
       data: {
         userId: tx.userId,
-        title: `Transaction ${tx.type === 'WITHDRAWAL' ? 'Withdrawal' : 'Deposit'} Approved`,
-        message: `Your ${tx.type.toLowerCase()} of $${Number(tx.amount).toFixed(2)} has been approved.`,
+        title: tx.type === 'WITHDRAWAL' ? 'Withdrawal Approved'
+             : tx.type === 'ACTIVATION' ? 'Account Activated'
+             : 'Deposit Approved',
+        message: `Your ${tx.type.toLowerCase()} of ${displayAmount} has been approved.`,
         type: 'TRANSACTION',
       }
     })
@@ -339,13 +356,30 @@ export async function adminCreateQuiz(data: { title: string, reward: number }, q
   revalidatePath('/admin/content')
 }
 
-export async function setDailySchedule(dateStr: string, quizIds: string[], videoIds: string[]) {
+export async function setDailySchedule(
+  dateStr: string, 
+  quizIds: string[], 
+  videoIds: string[],
+  t2000WinningNumbers?: string,
+  t5000WinningNumbers?: string,
+  t10000WinningNumbers?: string
+) {
   await requireAdmin()
   const date = new Date(dateStr)
-  await prisma.dailySchedule.upsert({
+  
+  const data: any = { 
+    date, 
+    quizIds, 
+    videoIds,
+    t2000WinningNumbers: t2000WinningNumbers || "[7, 77, 777]",
+    t5000WinningNumbers: t5000WinningNumbers || "[8, 88, 888]",
+    t10000WinningNumbers: t10000WinningNumbers || "[9, 99, 999]",
+  }
+
+  await (prisma.dailySchedule as any).upsert({
     where: { date },
-    create: { date, quizIds, videoIds },
-    update: { quizIds, videoIds }
+    create: data,
+    update: data
   })
   revalidatePath('/admin/content')
 }
@@ -357,14 +391,20 @@ export async function getGameConfig() {
 }
 
 export async function updateGameConfig(data: {
-  t2000WinToken?: string, t5000WinToken?: string, t10000WinToken?: string,
-  t2000DailyLimit?: number, t5000DailyLimit?: number, t10000DailyLimit?: number,
+  t2000DailyLimit?: number
+  t5000DailyLimit?: number
+  t10000DailyLimit?: number
+  t2000NumberPool?: number[]
+  t5000NumberPool?: number[]
+  t10000NumberPool?: number[]
 }) {
   await requireAdmin()
+  const updateData: any = { ...data }
+ 
   await prisma.gameConfig.upsert({
     where: { id: 'singleton' },
-    create: { id: 'singleton', ...data },
-    update: data
+    create: { id: 'singleton', ...updateData },
+    update: updateData,
   })
   revalidatePath('/admin/games')
 }

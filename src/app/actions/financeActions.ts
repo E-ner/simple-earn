@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import prisma from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
+import { formatRaw } from '@/lib/currency'
 
 /**
  * Activates the user account for a $1.00 fee.
@@ -154,7 +155,7 @@ export async function adminConfirmDeposit(transactionId: string) {
           userId: transaction.userId,
           title: transaction.type === 'DEPOSIT' ? 'Deposit Confirmed' : 'Account Activated',
           message: transaction.type === 'DEPOSIT' 
-            ? `Your deposit of $${Number(transaction.amount).toFixed(2)} has been credited.`
+            ? `Your deposit of ${formatRaw(Number(transaction.amount), transaction.currency)} has been credited.`
             : `Your account protocol has been initialized successfully.`,
           type: 'TRANSACTION'
         }

@@ -68,11 +68,13 @@ export default function GamesPage() {
     )
   }
 
-  const tiers = [
+  const allTiers = [
     { id: 'T2000' as GameType, name: 'Bronze Node', cost: 2.00, win: 3.50 },
     { id: 'T5000' as GameType, name: 'Silver Node', cost: 5.00, win: 9.00 },
     { id: 'T10000' as GameType, name: 'Gold Node', cost: 10.00, win: 18.00 }
   ]
+
+  const tiers = allTiers.filter(t => stats?.scheduledTiers?.[t.id])
 
   const currency = getCurrencyFromCountry(stats?.country || 'US')
 
@@ -87,153 +89,165 @@ export default function GamesPage() {
         </p>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left: Game Selection */}
-        <div className="lg:col-span-2 space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {tiers.map((tier) => (
-              <div 
-                key={tier.id} 
-                onClick={() => setSelectedTier(tier.id)}
-                className={`p-6 rounded-md border h-full transition-all text-left relative overflow-hidden cursor-pointer group ${
-                  selectedTier === tier.id 
-                    ? 'bg-(--accent)/10 border-(--accent)' 
-                    : 'bg-(--surface-2) border-(--border) hover:bg-(--surface) hover:border-(--border-hover)'
-                }`}
-              >
-                <div className="relative z-10">
-                  <h3 className="text-lg font-bold text-(--text-primary) mb-1">{tier.name}</h3>
-                  <div className="space-y-1">
-                    <p className="text-[10px] text-(--text-tertiary) uppercase font-bold tracking-widest">{dict?.games?.cost || 'Entry'}</p>
-                    <p className="text-xl font-bold text-(--text-primary)">{formatCurrency(tier.cost, currency)}</p>
-                  </div>
-                  <div className="mt-4 pt-4 border-t border-(--border)">
-                    <p className="text-[10px] text-(--text-tertiary) uppercase font-bold tracking-widest">{dict?.games?.winnings || 'Yield'}</p>
-                    <p className="text-sm font-bold text-(--accent)">{formatCurrency(tier.win, currency)}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {selectedTier && (
-            <div className="p-8 rounded-md bg-(--surface-2) border border-(--border) space-y-8 animate-in fade-in zoom-in duration-200">
-              <div className="text-center space-y-2">
-                <h3 className="text-xl font-bold text-(--text-primary)">{dict?.games?.select_token || 'Identify Winning Node'}</h3>
-                <p className="text-sm text-(--text-tertiary)">Select one of the five cryptographic nodes to match the network target.</p>
-              </div>
-
-              <div className="grid grid-cols-5 gap-3 max-w-md mx-auto">
-                {['1', '2', '3', '4', '5'].map((token) => (
-                  <button
-                    key={token}
-                    onClick={() => setSelectedToken(token)}
-                    className={`aspect-square rounded-md flex items-center justify-center text-2xl font-black transition-all border-2 ${
-                      selectedToken === token
-                        ? 'bg-(--accent)/10 border-(--accent) text-(--accent)'
-                        : 'bg-(--surface-3) border-(--border) text-(--text-tertiary) hover:border-(--accent)'
-                    }`}
-                  >
-                    {token}
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex justify-center pt-4">
-                <button
-                  disabled={!selectedToken || playing}
-                  onClick={handlePlay}
-                  className={`h-12 px-12 rounded-md font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-3 ${
-                    playing 
-                      ? 'bg-(--surface-3) text-(--text-tertiary) cursor-not-allowed'
-                      : 'bg-(--accent) text-white hover:opacity-90 shadow-lg shadow-(--accent)/20'
-                  }`}
-                >
-                  {playing ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <Zap className="w-4 h-4 fill-current" />
-                      {dict?.games?.play || 'Initialize Game'}
-                    </>
-                  )}
-                </button>
-              </div>
-
-              {gameResult && (
-                <div
-                  className={`p-6 rounded-md text-center space-y-2 border animate-in slide-in-from-bottom-4 duration-300 ${
-                    gameResult.didWin 
-                      ? 'bg-(--success)/10 border-(--success)/20' 
-                      : 'bg-(--error)/10 border-(--error)/20'
-                  }`}
-                >
-                  {gameResult.didWin ? (
-                    <>
-                      <div className="w-12 h-12 rounded-full bg-(--success)/20 flex items-center justify-center mx-auto mb-2">
-                        <Trophy className="w-6 h-6 text-(--success)" />
-                      </div>
-                      <h4 className="text-(--success) font-bold">{dict?.games?.win_msg || 'Success!'}</h4>
-                      <p className="text-(--text-primary) font-bold text-2xl">+{formatCurrency(gameResult.winnings, currency)}</p>
-                    </>
-                  ) : (
-                    <>
-                      <div className="w-12 h-12 rounded-full bg-(--error)/20 flex items-center justify-center mx-auto mb-2">
-                        <AlertCircle className="w-6 h-6 text-(--error)" />
-                      </div>
-                      <h4 className="text-(--error) font-bold">{dict?.games?.loss_msg || 'Mismatch'}</h4>
-                      <p className="text-(--text-tertiary) text-sm">Target was Token {gameResult.winToken}</p>
-                    </>
-                  )}
-                </div>
-              )}
-
-              {error && (
-                <div className="p-4 rounded-xl bg-(--error)/10 border border-(--error)/20 text-(--error) text-sm text-center">
-                  {error}
-                </div>
-              )}
-            </div>
-          )}
+      {tiers.length === 0 ? (
+        <div className="mt-10">
+          <EmptyState 
+            icon={Gamepad2}
+            title="Strategic Protocols Dormant"
+            description="No game protocols are currently scheduled for your node. Check back during the next synchronization window."
+          />
         </div>
-
-        {/* Right: Stats */}
-        <div className="space-y-6">
-          <div className="p-8 rounded-md bg-(--surface-2) border border-(--border)">
-            <h3 className="text-sm font-bold text-(--text-primary) uppercase tracking-widest mb-6 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-(--accent)" />
-              History
-            </h3>
-            
-            <div className="space-y-4">
-              {stats?.recentPlays?.map((play: any) => (
-                <div key={play.id} className="flex items-center justify-between p-3 rounded-md bg-(--surface-3) border border-(--border)">
-                  <div>
-                    <p className="text-xs font-bold text-(--text-primary) uppercase tracking-tighter">{play.gameType}</p>
-                    <p className="text-[10px] text-(--text-tertiary)">Picked {play.tokenPicked}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className={`text-xs font-bold ${play.didWin ? 'text-(--success)' : 'text-(--text-tertiary)'}`}>
-                      {play.didWin ? `+${formatCurrency(Number(play.winnings), currency)}` : `-${formatCurrency(Number(play.amount), currency)}`}
-                    </p>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left: Game Selection */}
+          <div className="lg:col-span-2 space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {tiers.map((tier) => (
+                <div 
+                  key={tier.id} 
+                  onClick={() => setSelectedTier(tier.id)}
+                  className={`p-6 rounded-md border h-full transition-all text-left relative overflow-hidden cursor-pointer group ${
+                    selectedTier === tier.id 
+                      ? 'bg-(--accent)/10 border-(--accent)' 
+                      : 'bg-(--surface-2) border-(--border) hover:bg-(--surface) hover:border-(--border-hover)'
+                  }`}
+                >
+                  <div className="relative z-10">
+                    <h3 className="text-lg font-bold text-(--text-primary) mb-1">{tier.name}</h3>
+                    <div className="space-y-1">
+                      <p className="text-[10px] text-(--text-tertiary) uppercase font-bold tracking-widest">{dict?.games?.cost || 'Entry'}</p>
+                      <p className="text-xl font-bold text-(--text-primary)">{formatCurrency(tier.cost, currency)}</p>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-(--border)">
+                      <p className="text-[10px] text-(--text-tertiary) uppercase font-bold tracking-widest">{dict?.games?.winnings || 'Yield'}</p>
+                      <p className="text-sm font-bold text-(--accent)">{formatCurrency(tier.win, currency)}</p>
+                    </div>
                   </div>
                 </div>
               ))}
+            </div>
+
+            {selectedTier && (
+              <div className="p-8 rounded-md bg-(--surface-2) border border-(--border) space-y-8 animate-in fade-in zoom-in duration-200">
+                <div className="text-center space-y-2">
+                  <h3 className="text-xl font-bold text-(--text-primary)">{dict?.games?.select_token || 'Identify Winning Number'}</h3>
+                  <p className="text-sm text-(--text-tertiary)">Enter a number between 0 and 999 to match the network target.</p>
+                </div>
+
+                <div className="max-w-xs mx-auto space-y-4">
+                  <input 
+                    type="number"
+                    min="0"
+                    max="999"
+                    value={selectedToken || ''}
+                    onChange={(e) => setSelectedToken(e.target.value)}
+                    placeholder="0 - 999"
+                    className="w-full bg-(--surface-3) border-2 border-(--border) text-(--text-primary) rounded-md p-4 text-center text-3xl font-black focus:border-(--accent) outline-none transition-all"
+                  />
+                  <button
+                    onClick={() => setSelectedToken(Math.floor(Math.random() * 1000).toString())}
+                    className="w-full py-2 text-[10px] font-bold uppercase tracking-widest text-(--text-tertiary) hover:text-(--accent) transition-colors"
+                  >
+                    Generate Random Number
+                  </button>
+                </div>
+
+                <div className="flex justify-center pt-4">
+                  <button
+                    disabled={!selectedToken || playing || parseInt(selectedToken) < 0 || parseInt(selectedToken) > 999}
+                    onClick={handlePlay}
+                    className={`h-12 px-12 rounded-md font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-3 ${
+                      playing 
+                        ? 'bg-(--surface-3) text-(--text-tertiary) cursor-not-allowed'
+                        : 'bg-(--accent) text-white hover:opacity-90 shadow-lg shadow-(--accent)/20'
+                    }`}
+                  >
+                    {playing ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                        Inverting...
+                      </>
+                    ) : (
+                      <>
+                        <Zap className="w-4 h-4 fill-current" />
+                        {dict?.games?.play || 'Initialize Game'}
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {gameResult && (
+                  <div
+                    className={`p-6 rounded-md text-center space-y-2 border animate-in slide-in-from-bottom-4 duration-300 ${
+                      gameResult.didWin 
+                        ? 'bg-(--success)/10 border-(--success)/20' 
+                        : 'bg-(--error)/10 border-(--error)/20'
+                    }`}
+                  >
+                    {gameResult.didWin ? (
+                      <>
+                        <div className="w-12 h-12 rounded-full bg-(--success)/20 flex items-center justify-center mx-auto mb-2">
+                          <Trophy className="w-6 h-6 text-(--success)" />
+                        </div>
+                        <h4 className="text-(--success) font-bold">{dict?.games?.win_msg || 'Success!'}</h4>
+                        <p className="text-(--text-primary) font-bold text-2xl">+{formatCurrency(gameResult.winnings, currency)}</p>
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-12 h-12 rounded-full bg-(--error)/20 flex items-center justify-center mx-auto mb-2">
+                          <AlertCircle className="w-6 h-6 text-(--error)" />
+                        </div>
+                        <h4 className="text-(--error) font-bold">{dict?.games?.loss_msg || 'Mismatch'}</h4>
+                        <p className="text-(--text-tertiary) text-sm">Target pool included {gameResult.winToken} and others.</p>
+                      </>
+                    )}
+                  </div>
+                )}
+
+                {error && (
+                  <div className="p-4 rounded-xl bg-(--error)/10 border border-(--error)/20 text-(--error) text-sm text-center">
+                    {error}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Right: Stats */}
+          <div className="space-y-6">
+            <div className="p-8 rounded-md bg-(--surface-2) border border-(--border)">
+              <h3 className="text-sm font-bold text-(--text-primary) uppercase tracking-widest mb-6 flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-(--accent)" />
+                History
+              </h3>
               
-              {(!stats?.recentPlays || stats.recentPlays.length === 0) && (
-                <EmptyState 
-                  icon={Gamepad2}
-                  title="Strategy Log Empty"
-                  description="No cryptographic game interactions detected. Initialize a node to begin yielding."
-                />
-              )}
+              <div className="space-y-4">
+                {stats?.recentPlays?.map((play: any) => (
+                  <div key={play.id} className="flex items-center justify-between p-3 rounded-md bg-(--surface-3) border border-(--border)">
+                    <div>
+                      <p className="text-xs font-bold text-(--text-primary) uppercase tracking-tighter">{play.gameType}</p>
+                      <p className="text-[10px] text-(--text-tertiary)">Picked {play.tokenPicked}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className={`text-xs font-bold ${play.didWin ? 'text-(--success)' : 'text-(--text-tertiary)'}`}>
+                        {play.didWin ? `+${formatCurrency(Number(play.winnings), currency)}` : `-${formatCurrency(Number(play.amount), currency)}`}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                
+                {(!stats?.recentPlays || stats.recentPlays.length === 0) && (
+                  <EmptyState 
+                    icon={Gamepad2}
+                    title="Strategy Log Empty"
+                    description="No cryptographic game interactions detected. Initialize a node to begin yielding."
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

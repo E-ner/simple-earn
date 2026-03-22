@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
+import { getTodayUTC } from '@/lib/dateconfig'
 
 const DAILY_VIDEO_LIMIT = 2
 
@@ -11,8 +12,7 @@ export async function getVideoDailyStatus() {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) return { watched: 0, limit: DAILY_VIDEO_LIMIT }
 
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  const today = getTodayUTC()
 
   const watchedToday = await prisma.videoWatch.count({
     where: {
@@ -28,8 +28,24 @@ export async function getVideos() {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) throw new Error('Unauthorized')
 
+  const today = getTodayUTC()
+
+  const schedule = await prisma.dailySchedule.findUnique({
+    where: { date: today }
+  })
+
+  if (!schedule || !Array.isArray(schedule.videoIds) || schedule.videoIds.length === 0) {
+    return []
+  }
+
+  const scheduledVideoIds = schedule.videoIds as string[]
+
   const videos = await prisma.video.findMany({
-    where: { isActive: true },
+    where: {
+      id: { in: scheduledVideoIds },
+      isActive: true
+    },
+    orderBy: { createdAt: 'desc' },
     include: {
       watches: {
         where: { userId: session.user.id }
@@ -37,7 +53,6 @@ export async function getVideos() {
     }
   })
 
-  // Format the response to be more usable on client
   return videos.map((v: any) => ({
     id: v.id,
     title: v.title,
@@ -56,64 +71,41 @@ export async function completeVideo(videoId: string, verificationCode?: string) 
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) throw new Error('Unauthorized')
 
-  const video = await prisma.video.findUnique({
-    where: { id: videoId }
-  })
-
+  const video = await prisma.video.findUnique({ where: { id: videoId } })
   if (!video) throw new Error('Video not found')
 
-  // Verification code check
   if (video.verificationCode && video.verificationCode !== verificationCode) {
     throw new Error('Invalid verification code')
   }
 
-  // Check if already watched this specific video
   const existingWatch = await prisma.videoWatch.findFirst({
-    where: {
-      userId: session.user.id,
-      videoId: videoId
-    }
+    where: { userId: session.user.id, videoId }
   })
 
   if (existingWatch) return { success: true, reward: 0, message: 'Already rewarded' }
 
-  // Check daily limit (2 videos per day)
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  const today = getTodayUTC()
   const watchedToday = await prisma.videoWatch.count({
-    where: {
-      userId: session.user.id,
-      watchedAt: { gte: today }
-    }
+    where: { userId: session.user.id, watchedAt: { gte: today } }
   })
 
   if (watchedToday >= DAILY_VIDEO_LIMIT) {
     return { success: false, reward: 0, message: 'Daily video limit reached (2 per day). Come back tomorrow!' }
   }
 
-  // Transaction for the reward
   await prisma.$transaction(async (tx: any) => {
-    // 1. Create VideoWatch record
     await tx.videoWatch.create({
       data: {
         userId: session.user.id,
-        videoId: videoId,
+        videoId,
         earnedAmount: video.reward,
-        scheduledDate: new Date() // Today
+        scheduledDate: today
       }
     })
-
-    // 2. Update user balance
     await tx.user.update({
       where: { id: session.user.id },
-      data: {
-        mainBalance: {
-          increment: video.reward
-        }
-      }
+      data: { mainBalance: { increment: video.reward } }
     })
-
-    // 3. Create ProtocolTransaction record
     await tx.protocolTransaction.create({
       data: {
         userId: session.user.id,
@@ -124,8 +116,6 @@ export async function completeVideo(videoId: string, verificationCode?: string) 
         currency: 'USD'
       }
     })
-
-    // 4. Notification
     await tx.notification.create({
       data: {
         userId: session.user.id,

@@ -16,33 +16,56 @@ vi.mock('@/lib/prisma', () => ({
       findMany: vi.fn(),
       findUnique: vi.fn(),
       create: vi.fn(),
-      update: vi.fn(),           // used by sendTicketMessage
+      update: vi.fn(),
     },
     supportMessage: {
       create: vi.fn(),
     },
     gamePlay: {
       count: vi.fn(),
-      create: vi.fn(),           // used inside $transaction by playGame
+      create: vi.fn(),
     },
     gameConfig: {
       findUnique: vi.fn(),
     },
-    $transaction: vi.fn(),
+    dailySchedule: {
+      findUnique: vi.fn(),
+      findFirst: vi.fn(),
+      upsert: vi.fn(),
+    },
     notification: {
       create: vi.fn(),
-    }
+    },
+    $transaction: vi.fn(),
   }
 }))
 
 // ── Mock next-auth ──────────────────────────────────────────────────────────
 vi.mock('next-auth', () => ({
   default: vi.fn(() => ({})),
-  getServerSession: vi.fn(() => Promise.resolve({ user: { id: 'test-user-id', role: 'USER' } }))
+  getServerSession: vi.fn(() =>
+    Promise.resolve({ user: { id: 'test-user-id', role: 'USER' } })
+  ),
 }))
 
 vi.mock('@/lib/auth', () => ({ authOptions: {} }))
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }))
+
+// ── Mock currency lib ───────────────────────────────────────────────────────
+// walletActions imports getCurrencyFromCountry, convertToUSD, formatCurrency, formatRaw.
+// We use a 1:1 USD ratio so amount values in tests are predictable.
+vi.mock('@/lib/currency', () => ({
+  getCurrencyFromCountry: vi.fn(() => 'USD'),
+  convertToUSD: vi.fn((amount: number) => amount), // 1:1 for tests
+  formatCurrency: vi.fn((amount: number) => `$${amount}`),
+  formatRaw: vi.fn((amount: number, currency: string) => `${currency} ${amount}`),
+  COUNTRY_CURRENCY: {},
+}))
+
+// ── Mock dateUtils ──────────────────────────────────────────────────────────
+vi.mock('@/lib/dateUtils', () => ({
+  getTodayUTC: vi.fn(() => new Date('2026-03-22T00:00:00.000Z')),
+}))
 
 import prisma from '@/lib/prisma'
 import { createTicket, getUserTickets, sendTicketMessage } from '@/app/actions/supportActions'
@@ -54,21 +77,33 @@ const TEST_USER = {
   id: 'test-user-id',
   email: 'test@example.com',
   username: 'testuser',
+  country: 'US',
   mainBalance: 100,
   gameBalance: 50,
   isActive: true,
+}
+
+// ── Today's daily schedule with winning numbers ─────────────────────────────
+const TODAY_SCHEDULE = {
+  id: 'schedule-1',
+  date: new Date('2026-03-22T00:00:00.000Z'),
+  quizIds: [],
+  videoIds: [],
+  t2000WinningNumbers: '[7, 77, 777]',
+  t5000WinningNumbers: '[8, 88, 888]',
+  t10000WinningNumbers: '[9, 99, 999]',
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
 describe('User Section Integration Tests', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    // Default: user exists with balance
     ;(prisma.user.findUnique as any).mockResolvedValue(TEST_USER)
     ;(prisma.user.update as any).mockResolvedValue(TEST_USER)
     ;(prisma.$transaction as any).mockImplementation((fn: any) => fn(prisma))
     ;(prisma.notification.create as any).mockResolvedValue({})
     ;(prisma.protocolTransaction.create as any).mockResolvedValue({})
+    ;(prisma.dailySchedule.findUnique as any).mockResolvedValue(TODAY_SCHEDULE)
   })
 
   // ── Support System ────────────────────────────────────────────────────────
@@ -104,20 +139,36 @@ describe('User Section Integration Tests', () => {
 
   // ── Wallet & Transactions ─────────────────────────────────────────────────
   describe('Wallet & Transactions', () => {
-    it('should prevent withdrawal below minimum limit ($5)', async () => {
-      await expect(requestWithdrawal(2, 'Mobile Money', '0780000000')).rejects.toThrow()
+    it('should prevent withdrawal below minimum limit ($1)', async () => {
+      // 0.5 USD is below the $1 minimum — currency mock is 1:1 so convertToUSD(0.5) = 0.5
+      await expect(requestWithdrawal(0.5, 'Mobile Money', '0780000000')).rejects.toThrow()
+    })
+
+    it('should prevent withdrawal above maximum limit ($100)', async () => {
+      // 200 USD exceeds the $100 maximum
+      await expect(requestWithdrawal(200, 'Mobile Money', '0780000000')).rejects.toThrow()
     })
 
     it('should prevent withdrawal if balance is insufficient', async () => {
+      // User has $4 main balance, trying to withdraw $10
       ;(prisma.user.findUnique as any).mockResolvedValue({ ...TEST_USER, mainBalance: 4 })
-      await expect(requestWithdrawal(200, 'Bank', '123456789')).rejects.toThrow()
+      await expect(requestWithdrawal(10, 'Bank', '123456789')).rejects.toThrow()
     })
 
     it('should process a valid withdrawal and create a PENDING transaction', async () => {
-      // It uses prisma.protocolTransaction.create directly, not $transaction
+      // $10 is within [$1, $100] and user has $100 balance
       const result = await requestWithdrawal(10, 'Crypto', '0x123...')
       expect(result.success).toBe(true)
-      expect(prisma.protocolTransaction.create).toHaveBeenCalled()
+      expect(prisma.protocolTransaction.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            type: 'WITHDRAWAL',
+            status: 'PENDING',
+            amount: 10,
+            currency: 'USD',
+          })
+        })
+      )
     })
   })
 
@@ -126,29 +177,52 @@ describe('User Section Integration Tests', () => {
     it('should prevent playing if game balance is insufficient', async () => {
       ;(prisma.user.findUnique as any).mockResolvedValue({ ...TEST_USER, gameBalance: 0 })
       ;(prisma.gameConfig.findUnique as any).mockResolvedValue({
-        id: 'singleton', t2000WinToken: 'A', t2000DailyLimit: 3
+        id: 'singleton', t2000DailyLimit: 3, t5000DailyLimit: 3, t10000DailyLimit: 3,
       })
       ;(prisma.gamePlay.count as any).mockResolvedValue(0)
-      await expect(playGame('T2000', 'A')).rejects.toThrow()
+      await expect(playGame('T2000', '7')).rejects.toThrow()
     })
 
-    it('should process a game play and resolve with a win/loss result', async () => {
+    it('should resolve as a WIN when picked number is in the winning pool', async () => {
       ;(prisma.gameConfig.findUnique as any).mockResolvedValue({
-        id: 'singleton', t2000WinToken: 'A', t5000WinToken: 'B', t10000WinToken: 'C',
-        t2000DailyLimit: 3, t5000DailyLimit: 3, t10000DailyLimit: 3
+        id: 'singleton', t2000DailyLimit: 3, t5000DailyLimit: 3, t10000DailyLimit: 3,
       })
       ;(prisma.gamePlay.count as any).mockResolvedValue(0)
       ;(prisma.user.findUnique as any).mockResolvedValue({ ...TEST_USER, gameBalance: 50 })
+      ;(prisma.gamePlay.create as any).mockResolvedValue({})
 
-      const originalRandom = Math.random
-      Math.random = vi.fn().mockReturnValue(0) // yields winToken = '1'
-
-      const result = await playGame('T2000', '1') // picking '1', win token is '1' → win
+      // T2000 winning numbers are [7, 77, 777] — pick 7 → WIN
+      const result = await playGame('T2000', '7')
       expect(result).toHaveProperty('didWin')
       expect(result.didWin).toBe(true)
+      expect(result.winnings).toBe(3.5)
       expect(prisma.$transaction).toHaveBeenCalled()
+    })
 
-      Math.random = originalRandom
+    it('should resolve as a LOSS when picked number is not in the winning pool', async () => {
+      ;(prisma.gameConfig.findUnique as any).mockResolvedValue({
+        id: 'singleton', t2000DailyLimit: 3, t5000DailyLimit: 3, t10000DailyLimit: 3,
+      })
+      ;(prisma.gamePlay.count as any).mockResolvedValue(0)
+      ;(prisma.user.findUnique as any).mockResolvedValue({ ...TEST_USER, gameBalance: 50 })
+      ;(prisma.gamePlay.create as any).mockResolvedValue({})
+
+      // T2000 winning numbers are [7, 77, 777] — pick 42 → LOSS
+      const result = await playGame('T2000', '42')
+      expect(result).toHaveProperty('didWin')
+      expect(result.didWin).toBe(false)
+      expect(result.winnings).toBe(0)
+    })
+
+    it('should throw when daily play limit is reached', async () => {
+      ;(prisma.gameConfig.findUnique as any).mockResolvedValue({
+        id: 'singleton', t2000DailyLimit: 3, t5000DailyLimit: 3, t10000DailyLimit: 3,
+      })
+      // User has already played 3 times today — at the limit
+      ;(prisma.gamePlay.count as any).mockResolvedValue(3)
+      ;(prisma.user.findUnique as any).mockResolvedValue({ ...TEST_USER, gameBalance: 50 })
+
+      await expect(playGame('T2000', '7')).rejects.toThrow()
     })
   })
 })

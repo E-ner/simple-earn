@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { useToast } from '@/context/ToastContext'
+import { formatCurrency, getCurrencyFromCountry } from '@/lib/currency'
+import { getWalletData } from '@/app/actions/walletActions'
 
 type Question = {
   id: string
@@ -34,12 +36,18 @@ export default function QuizPlayerPage() {
   const [answers, setAnswers] = useState<{questionId: string, selectedIndex: number}[]>([])
   const [status, setStatus] = useState<'LOADING' | 'READY' | 'PLAYING' | 'SUBMITTING' | 'FINISHED'>('LOADING')
   const [result, setResult] = useState<{passed: boolean, earnedAmount: number, score: number, total: number} | null>(null)
+  const [country, setCountry] = useState('US')
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
 
   useEffect(() => {
     async function loadQuiz() {
       try {
-        const res = await fetch('/api/quizzes')
-        const data = await res.json()
+        const [quizRes, walletRes] = await Promise.all([
+          fetch('/api/quizzes'),
+          getWalletData()
+        ])
+        const data = await quizRes.json()
+        setCountry(walletRes.country || 'US')
         const found = data.quizzes?.find((q: Quiz) => q.id === quizId)
         if (found) {
           setQuiz(found)
@@ -63,10 +71,10 @@ export default function QuizPlayerPage() {
         setTimeLeft(t => t - 1)
       }, 1000)
     } else if (timeLeft === 0 && status === 'PLAYING') {
-      handleNextOrSubmit() 
+      handleNextOrSubmit(answers) 
     }
     return () => clearInterval(timerId)
-  }, [timeLeft, status])
+  }, [timeLeft, status, answers])
 
   const startGame = () => {
     // Optional: Check activation here or in parent
@@ -74,34 +82,38 @@ export default function QuizPlayerPage() {
   }
 
   const selectAnswer = (index: number) => {
-    if (status !== 'PLAYING') return
+    if (status !== 'PLAYING' || selectedIdx !== null) return
 
-    setAnswers(prev => [
-      ...prev, 
-      { questionId: quiz!.questions[currentQIndex].id, selectedIndex: index }
-    ])
+    setSelectedIdx(index)
+    const newAnswer = { questionId: quiz!.questions[currentQIndex].id, selectedIndex: index }
+    const updatedAnswers = [...answers, newAnswer]
+    setAnswers(updatedAnswers)
 
-    handleNextOrSubmit()
+    // Brief delay to "see" the selection
+    setTimeout(() => {
+      handleNextOrSubmit(updatedAnswers)
+    }, 400)
   }
 
-  const handleNextOrSubmit = () => {
+  const handleNextOrSubmit = (currentAnswers: {questionId: string, selectedIndex: number}[]) => {
     if (!quiz) return
+    setSelectedIdx(null)
 
     if (currentQIndex < quiz.questions.length - 1) {
       setCurrentQIndex(prev => prev + 1)
       setTimeLeft(quiz.timeLimit)
     } else {
-      submitQuiz()
+      submitQuiz(currentAnswers)
     }
   }
 
-  const submitQuiz = async () => {
+  const submitQuiz = async (finalAnswers: {questionId: string, selectedIndex: number}[]) => {
     setStatus('SUBMITTING')
     try {
       const res = await fetch(`/api/quizzes/${quizId}/attempt`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ answers })
+        body: JSON.stringify({ answers: finalAnswers })
       })
       const data = await res.json()
       setResult(data)
@@ -146,7 +158,7 @@ export default function QuizPlayerPage() {
           </p>
           {result.passed && (
             <div className="bg-(--accent-muted) text-(--accent) font-mono text-xl py-4 rounded-md mb-8 border border-(--accent-border)">
-              +${Number(result.earnedAmount).toFixed(2)} Earned
+              + {formatCurrency(result.earnedAmount, getCurrencyFromCountry(country))}
             </div>
           )}
           <Link href="/en/dashboard/quizzes" className="btn btn-primary w-full">

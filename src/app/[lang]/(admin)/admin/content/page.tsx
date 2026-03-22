@@ -1,4 +1,4 @@
-import { getAllQuizzes, getAllVideos, getScheduleForDate } from '@/app/actions/adminActions'
+import { getAllQuizzes, getAllVideos, getScheduleForDate, getGameConfig } from '@/app/actions/adminActions'
 import { ContentSchedulerClient } from '@/components/admin/ContentSchedulerClient'
 import { BookOpen } from 'lucide-react'
 
@@ -7,10 +7,11 @@ export const dynamic = 'force-dynamic'
 export default async function ContentPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params
   const today = new Date().toISOString().split('T')[0]
-  const [quizzes, videos, todaySchedule] = await Promise.all([
+  const [quizzes, videos, todaySchedule, gameConfig] = await Promise.all([
     getAllQuizzes(),
     getAllVideos(),
     getScheduleForDate(today),
+    getGameConfig(),
   ])
 
   return (
@@ -28,6 +29,7 @@ export default async function ContentPage({ params }: { params: Promise<{ lang: 
         videos={videos}
         initialSchedule={todaySchedule}
         defaultDate={today}
+        gameConfig={gameConfig}
       />
     </div>
   )
