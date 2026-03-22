@@ -66,44 +66,6 @@ describe('RegisterWizard', () => {
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith('/api/auth/register', expect.anything())
-      // Check if it reached step 4
-      expect(screen.getByText('Verify your email')).toBeInTheDocument()
-    })
-  })
-
-  it('handles OTP verification', async () => {
-    (global.fetch as any).mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve({ success: true })
-    });
-
-    render(<RegisterWizard />)
-    
-    // Manually push to step 4 by manipulating state/DOM logic
-    fireEvent.change(screen.getByPlaceholderText('hello@example.com'), { target: { value: 'test@example.com' } })
-    fireEvent.click(screen.getByTestId('next-btn-1'))
-    
-    const pwInputs = screen.getAllByPlaceholderText('••••••••')
-    fireEvent.change(pwInputs[0], { target: { value: 'password123' } })
-    fireEvent.change(pwInputs[1], { target: { value: 'password123' } })
-    fireEvent.click(screen.getByTestId('next-btn-2'))
-    
-    // Auto mock the register api for step 3
-    fireEvent.click(screen.getByTestId('submit-register'))
-
-    await waitFor(() => expect(screen.getByText('Verify your email')).toBeInTheDocument())
-
-    // Mock OTP verification response
-    ;(global.fetch as any).mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve({ success: true })
-    });
-
-    // Step 4
-    fireEvent.change(screen.getByPlaceholderText('000000'), { target: { value: '123456' } })
-    fireEvent.click(screen.getByTestId('submit-otp'))
-
-    await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith('/en/login')
     })
   })

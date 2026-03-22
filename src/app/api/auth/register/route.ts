@@ -34,7 +34,6 @@ export async function POST(req: Request) {
     }
 
     const passwordHash = await bcrypt.hash(password, 10)
-    const verificationOTP = Math.floor(100000 + Math.random() * 900000).toString() // Generate 6-digit OTP
 
     await prisma.user.create({
       data: {
@@ -44,8 +43,8 @@ export async function POST(req: Request) {
         country,
         phone,
         mainBalance: 1.00, // Initial Registration Bonus
-        emailVerifyToken: verificationOTP,
-        emailVerifyExpiry: new Date(Date.now() + 15 * 60 * 1000) // 15 mins expiry
+        isEmailVerified: true,
+        isActive: true,
       }
     })
 
@@ -64,11 +63,7 @@ export async function POST(req: Request) {
       });
     }
 
-    // Import the mail utility dynamically (or at the top)
-    const { sendVerificationEmail } = await import('@/lib/mail');
-    await sendVerificationEmail(email, verificationOTP);
-
-    return NextResponse.json({ message: "User registered. Please check your email for the verification code.", success: true }, { status: 201 })
+    return NextResponse.json({ message: "User registered successfully.", success: true }, { status: 201 })
   } catch (error: any) {
     return NextResponse.json({ error: error?.message || "Internal Server Error" }, { status: 500 })
   }

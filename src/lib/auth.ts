@@ -38,13 +38,9 @@ export const authOptions: NextAuthOptions = {
 
         if (!user || !user.passwordHash) return null
 
-        // Enforce Verification and Suspension
+        // Enforce Suspension
         if (user.isSuspended) {
            throw new Error('ACCOUNT_SUSPENDED')
-        }
-        
-        if (!user.isEmailVerified) {
-           throw new Error('EMAIL_NOT_VERIFIED')
         }
 
         return {

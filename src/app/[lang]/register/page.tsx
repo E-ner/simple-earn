@@ -31,8 +31,7 @@ export default function RegisterWizard() {
     password: '',
     confirmPassword: '',
     country: 'RW',
-    phone: '',
-    otp: ''
+    phone: ''
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -74,30 +73,8 @@ export default function RegisterWizard() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Failed to register')
-      nextStep() // Go to Step 4 (OTP)
-    } catch (err: any) {
-      setErrorMSG(err.message)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  const submitOTP = async () => {
-    setIsSubmitting(true)
-    setErrorMSG(null)
-    try {
-      const res = await fetch('/api/auth/verify-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: formData.email,
-          code: formData.otp
-        })
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Failed to verify OTP')
       
-      // Auto-redirect to login
+      // Successfully registered, go to login
       router.push('/en/login')
     } catch (err: any) {
       setErrorMSG(err.message)
@@ -106,13 +83,14 @@ export default function RegisterWizard() {
     }
   }
 
+
   return (
     <div className="min-h-screen bg-(--bg-base) flex flex-col items-center justify-center p-6 sm:p-12 font-learn">
       <div className="w-full max-w-md bg-(--surface) border border-(--border) rounded-xl shadow-2xl p-8 relative overflow-hidden">
         
         {/* Step Indicators */}
         <div className="flex gap-2 mb-8 justify-center">
-          {[1,2,3,4].map(s => (
+          {[1,2,3].map(s => (
             <div 
               key={s} 
               className={`h-2 flex-1 rounded-full transition-colors duration-300 ${s <= step ? 'bg-(--accent)' : 'bg-(--surface-3)'}`}
@@ -125,7 +103,6 @@ export default function RegisterWizard() {
           {step === 1 && "Create your account"}
           {step === 2 && "Choose your details"}
           {step === 3 && "Where are you from?"}
-          {step === 4 && "Verify your email"}
         </h2>
 
         {errorMSG && (
@@ -191,32 +168,6 @@ export default function RegisterWizard() {
             </div>
           )}
 
-          {/* Step 4: OTP Verification */}
-          {step === 4 && (
-            <div className="animate-fade-up space-y-4 text-center">
-              <p className="text-(--text-secondary) mb-4">We sent a 6-digit code to <b className="text-(--text-primary)">{formData.email}</b>.</p>
-              <div>
-                <input 
-                  name="otp" value={formData.otp} onChange={handleChange} 
-                  type="text" placeholder="000000" maxLength={6} 
-                  className="input text-center text-4xl tracking-widest font-mono h-20" 
-                />
-              </div>
-              <button className="btn-primary w-full btn-lg mt-6" onClick={submitOTP} disabled={isSubmitting || formData.otp.length !== 6} data-testid="submit-otp">
-                {isSubmitting ? 'Verifying...' : 'Verify Now'}
-              </button>
-
-              <div className="mt-6 pt-6 border-t border-(--border) overflow-hidden">
-                <button 
-                  className="text-[10px] font-black uppercase tracking-widest text-(--accent) hover:opacity-80 transition-opacity"
-                  onClick={() => setStep(1)}
-                  disabled={isSubmitting}
-                >
-                  Entered wrong email? Change it here.
-                </button>
-              </div>
-            </div>
-          )}
         </div>
 
         {step === 1 && (

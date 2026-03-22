@@ -35,8 +35,6 @@ export default function LoginPage() {
       if (result?.error) {
         if (result.error === 'ACCOUNT_SUSPENDED') {
           router.push('/en/suspended' as any)
-        } else if (result.error === 'EMAIL_NOT_VERIFIED') {
-          router.push(`/en/verify-email?email=${encodeURIComponent(data.email)}` as any)
         } else {
           setError('Invalid email or password')
         }
@@ -113,9 +111,6 @@ export default function LoginPage() {
                   <label className="block text-sm font-medium text-(--text-secondary) font-learn">
                     Password
                   </label>
-                  <Link href={"/en/forgot-password" as any} className="text-sm font-medium text-(--accent) hover:text-(--accent-hover) transition-colors">
-                    Forgot password?
-                  </Link>
                 </div>
                 <input
                   {...register('password')}

@@ -18,10 +18,6 @@ services:
         sync: false
       - key: CRON_SECRET
         sync: false
-      - key: RESEND_API_KEY
-        sync: false
-      - key: EMAIL_FROM
-        value: "Simple Earn <noreply@smartearn.com>"
 
 databases:
   - name: simple-earn-db
